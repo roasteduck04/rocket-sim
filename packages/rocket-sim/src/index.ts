@@ -22,5 +22,6 @@ export * from './guidance/landing.js';
 export * from './guidance/socp.js';
 export * from './guidance/pdg.js';
 export * from './guidance/boostback.js';
+export * from './guidance/entryDescent.js';
 export * from './sim.js';
 export * from './loader.js';

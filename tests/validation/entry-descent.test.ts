@@ -4,7 +4,15 @@
  * §10.2.4-style convergence sweep extended to high-altitude entries.
  */
 import { describe, it, expect } from 'vitest';
-import { loadAeroTable, loadRocketYaml, loadThrustCurve } from '@fds/rocket-sim';
+import {
+  loadAeroTable,
+  loadRocketYaml,
+  loadThrustCurve,
+  entryDescentGuidance,
+  initialEntryState,
+  runEntryDescentSim,
+} from '@fds/rocket-sim';
+import type { EntryScenario, RocketConfig } from '@fds/rocket-sim';
 
 const THRUST_CSV = '0,210000\n150,210000';
 const AERO_CSV =
@@ -74,5 +82,68 @@ describe('entry-burn config schema', () => {
     expect(cfg.control?.landingTarget?.padRadiusM).toBe(15);
     expect(cfg.control?.landingTarget?.touchdownTiltMaxRad).toBeCloseTo((5 * Math.PI) / 180, 10);
     expect(cfg.control?.landingTarget?.rudImpactSpeedMps).toBe(25);
+  });
+});
+
+// Zero-coefficient aero table: isolates guidance + propulsion + gravity,
+// following the §10.2.4 precedent (tail-first flight is outside the shipped
+// Barrowman table's AoA validity — see rocket-landing.test.ts header).
+const zeroAero = loadAeroTable(AERO_CSV);
+
+/** 80 kN landing engine: comfortable T/W ≈ 1.9 at the 4200 kg entry mass. */
+const CFG: RocketConfig = loadRocketYaml(YAML, {
+  thrustCurveCsv: THRUST_CSV,
+  aeroTableCsv: AERO_CSV,
+});
+CFG.aero = { table: zeroAero, cpFromNoseM: 5.4 };
+
+const ENTRY: EntryScenario = {
+  altitudeM: 15000,
+  speedMps: 400,
+  gammaRad: (-80 * Math.PI) / 180,
+  downrangeM: 500,
+  propellantKg: 2000,
+};
+
+describe('entryDescentGuidance phase machine', () => {
+  it('coasts (throttle 0) above the ignite altitude', () => {
+    const g = entryDescentGuidance(CFG);
+    const s = initialEntryState(CFG, { ...ENTRY, altitudeM: 15000 });
+    const cmd = g.command(0, s);
+    expect(g.phase).toBe('coast');
+    expect(cmd.throttle).toBe(0);
+    expect(cmd.deltaP).toBe(0);
+    expect(g.entryBurnIgnitionTime).toBeNull();
+  });
+
+  it('ignites retrograde at full throttle below the ignite altitude', () => {
+    const g = entryDescentGuidance(CFG);
+    g.command(0, initialEntryState(CFG, { ...ENTRY, altitudeM: 15000 }));
+    const cmd = g.command(0.01, initialEntryState(CFG, { ...ENTRY, altitudeM: 11900 }));
+    expect(g.phase).toBe('entryBurn');
+    expect(g.entryBurnIgnitionTime).toBe(0.01);
+    expect(cmd.throttle).toBe(CFG.propulsion.throttle.max);
+  });
+
+  it('cuts off below the target speed and delegates to powered descent', () => {
+    const g = entryDescentGuidance(CFG);
+    g.command(0, initialEntryState(CFG, { ...ENTRY, altitudeM: 11900 }));
+    // Same altitude, speed now below the 150 m/s target → cutoff + delegation.
+    const slow = initialEntryState(CFG, { ...ENTRY, altitudeM: 11000, speedMps: 100 });
+    g.command(0.01, slow);
+    expect(g.phase).toBe('descent');
+    expect(g.entryBurnCutoffTime).toBe(0.01);
+  });
+
+  it('skips straight to descent when entry_burn is absent (graceful degradation)', () => {
+    const noBurn: RocketConfig = {
+      ...CFG,
+      control: {
+        ...CFG.control!,
+        descent: { ...CFG.control!.descent!, entryBurn: undefined },
+      },
+    };
+    const g = entryDescentGuidance(noBurn);
+    expect(g.phase).toBe('descent');
   });
 });
