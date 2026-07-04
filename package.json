@@ -1,0 +1,25 @@
+{
+  "name": "flight-dynamics-suite",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Flight Dynamics & Controls Simulation Suite — shared physics core, atmosphere models, and per-regime simulators.",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:web": "npm run test -w web",
+    "dev:web": "npm run dev -w web",
+    "build:web": "npm run build -w web",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "typecheck:web": "tsc --noEmit -p apps/web/tsconfig.json"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "typescript": "^5.7.2",
+    "vitest": "^3.2.4"
+  }
+}

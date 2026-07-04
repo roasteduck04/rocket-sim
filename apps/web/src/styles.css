@@ -1,0 +1,351 @@
+/*
+ * Flight Dynamics & Controls Suite — app chrome (plan Phase 6, README §9).
+ * Dark cockpit theme, committed deliberately (single-mode app). Color tokens
+ * follow the dataviz reference palette's dark column; chart code imports the
+ * same hex values from src/lib/palette.ts so SVG/Recharts and CSS stay in sync.
+ */
+
+:root {
+  --page: #0d0d0d;
+  --surface: #1a1a19;
+  --ink: #ffffff;
+  --ink-2: #c3c2b7;
+  --muted: #898781;
+  --grid: #2c2c2a;
+  --axis: #383835;
+  --border: rgba(255, 255, 255, 0.1);
+  --series-1: #3987e5; /* blue */
+  --series-2: #199e70; /* aqua */
+  --series-3: #c98500; /* yellow */
+  --series-6: #e66767; /* red */
+  --good: #0ca30c;
+  --warning: #fab219;
+  --serious: #ec835a;
+  --critical: #d03b3b;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--page);
+  color: var(--ink);
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.app-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 1.5rem;
+  padding: 0.9rem 1.4rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.app-header h1 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin: 0;
+  letter-spacing: 0.02em;
+}
+
+.app-header .subtitle {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.tab-bar {
+  display: flex;
+  gap: 0.5rem;
+  margin-left: auto;
+}
+
+.tab-bar button {
+  background: transparent;
+  color: var(--ink-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.45rem 1rem;
+  font: inherit;
+  cursor: pointer;
+}
+
+.tab-bar button:hover {
+  color: var(--ink);
+  border-color: var(--muted);
+}
+
+.tab-bar button[aria-pressed='true'] {
+  color: var(--ink);
+  border-color: var(--series-1);
+  background: rgba(57, 135, 229, 0.12);
+}
+
+.module {
+  padding: 1.2rem 1.4rem 3rem;
+}
+
+.module-grid {
+  display: grid;
+  grid-template-columns: 300px minmax(0, 1fr);
+  gap: 1.2rem;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .module-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.9rem 1rem;
+}
+
+.panel h2 {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin: 0 0 0.6rem;
+}
+
+.panel + .panel {
+  margin-top: 1.2rem;
+}
+
+.stack > * + * {
+  margin-top: 1.2rem;
+}
+
+/* --- forms ------------------------------------------------------------- */
+
+.field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  margin-bottom: 0.5rem;
+}
+
+.field label {
+  color: var(--ink-2);
+  font-size: 0.85rem;
+}
+
+.field input[type='number'],
+.field select {
+  width: 7.5rem;
+  background: var(--page);
+  color: var(--ink);
+  border: 1px solid var(--axis);
+  border-radius: 6px;
+  padding: 0.3rem 0.45rem;
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+}
+
+.field input[type='range'] {
+  width: 9rem;
+  accent-color: var(--series-1);
+}
+
+.btn {
+  display: inline-block;
+  background: var(--series-1);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 1.1rem;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.btn.secondary {
+  background: transparent;
+  color: var(--ink-2);
+  border: 1px solid var(--axis);
+}
+
+.btn.secondary:hover:not(:disabled) {
+  color: var(--ink);
+  border-color: var(--muted);
+}
+
+.btn-row {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-top: 0.6rem;
+}
+
+/* --- stat tiles & chips ------------------------------------------------ */
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 0.6rem;
+}
+
+.stat {
+  background: var(--page);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.5rem 0.65rem;
+}
+
+.stat .label {
+  display: block;
+  color: var(--muted);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.stat .value {
+  font-size: 1.05rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.stat .unit {
+  color: var(--ink-2);
+  font-size: 0.75rem;
+  margin-left: 0.2rem;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border-radius: 999px;
+  padding: 0.15rem 0.7rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border: 1px solid currentColor;
+}
+
+.chip.good {
+  color: var(--good);
+}
+
+.chip.warning {
+  color: var(--warning);
+}
+
+.chip.critical {
+  color: var(--critical);
+}
+
+.chip.neutral {
+  color: var(--muted);
+}
+
+.error-note {
+  color: var(--critical);
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+.hint {
+  color: var(--muted);
+  font-size: 0.8rem;
+  margin: 0.4rem 0 0;
+}
+
+/* --- charts ------------------------------------------------------------ */
+
+.chart-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(430px, 1fr));
+  gap: 1.2rem;
+}
+
+.chart-card h3 {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--ink-2);
+  margin: 0 0 0.4rem;
+}
+
+.chart-card .recharts-wrapper {
+  font-size: 11px;
+}
+
+.scene-canvas {
+  height: 380px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: #0a0f16;
+}
+
+/* --- module C widgets --------------------------------------------------- */
+
+.cockpit-row {
+  display: flex;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+table.modal-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+
+table.modal-table th,
+table.modal-table td {
+  text-align: right;
+  padding: 0.28rem 0.5rem;
+  border-bottom: 1px solid var(--grid);
+  font-size: 0.82rem;
+}
+
+table.modal-table th {
+  color: var(--muted);
+  font-weight: 500;
+}
+
+table.modal-table th:first-child,
+table.modal-table td:first-child {
+  text-align: left;
+}
+
+.stick-pad {
+  touch-action: none;
+  cursor: crosshair;
+  border-radius: 10px;
+}
+
+.kbd {
+  display: inline-block;
+  border: 1px solid var(--axis);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  padding: 0 0.35rem;
+  font-size: 0.75rem;
+  color: var(--ink-2);
+  background: var(--page);
+}

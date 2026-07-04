@@ -1,0 +1,22 @@
+# Generic light single-engine aircraft — the README §8.3 reference derivative set.
+# Optional (Ambiguity A2) fields are omitted so the loader exercises its defaults:
+# CL0 is computed from the level-flight trim; all other optional derivatives → 0.
+name: "Generic Light Single-Engine"
+geometry: { wing_area_m2: 16.2, chord_m: 1.49, span_m: 10.9 }
+mass: { mass_kg: 1100, Iyy_kgm2: 1350, Ixx_kgm2: 900, Izz_kgm2: 2100 }
+trim: { U0_mps: 60, theta0_deg: 0, altitude_m: 1000 }
+longitudinal_derivatives_nondim:
+  CL_alpha: 4.4
+  CD_alpha: 0.35
+  Cm_alpha: -0.89
+  Cm_q: -12.4
+  Cm_alpha_dot: -4.2
+  Cm_delta_e: -1.28
+lateral_derivatives_nondim:
+  CY_beta: -0.393
+  Cl_beta: -0.0923
+  Cn_beta: 0.0587
+  Cl_p: -0.484
+  Cn_r: -0.0937
+  Cl_delta_a: 0.229
+  Cn_delta_r: -0.0645

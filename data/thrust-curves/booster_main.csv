@@ -1,0 +1,9 @@
+# Reference TVC booster main engine thrust curve (README §8.1).
+# Roughly constant ~210 kN; total impulse exceeds the 8.8 t propellant load so
+# the sim's propellant-exhaustion cutoff (not the curve end) terminates the burn
+# near t ~ 120 s. Sea-level liftoff thrust-to-weight ~1.95.
+# time_s,thrust_N
+0,0
+0.2,210000
+150,210000
+151,0

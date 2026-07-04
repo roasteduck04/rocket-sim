@@ -1,0 +1,31 @@
+# North American Navion — the classic textbook validation aircraft (Ambiguity
+# A16). Geometry, mass and non-dimensional derivatives from R. Nelson, "Flight
+# Stability and Automatic Control" (2nd ed.), sea-level cruise at U0 = 176 ft/s
+# (53.64 m/s). Values converted to SI. This set reproduces the Navion's published
+# modes: short-period (ωn≈3.6, ζ≈0.7), phugoid (ωn≈0.21, ζ≈0.08), dutch-roll
+# (ωn≈2.4, ζ≈0.20), roll (τ≈0.12 s), and a slightly-stable spiral.
+name: "North American Navion"
+geometry: { wing_area_m2: 17.09, chord_m: 1.737, span_m: 10.18 }
+mass: { mass_kg: 1247, Iyy_kgm2: 4068, Ixx_kgm2: 1421, Izz_kgm2: 4786 }
+trim: { U0_mps: 53.64, theta0_deg: 0, altitude_m: 0 }
+longitudinal_derivatives_nondim:
+  CL0: 0.41
+  CD0: 0.05
+  CL_alpha: 4.44
+  CD_alpha: 0.33
+  Cm_alpha: -0.683
+  Cm_q: -9.96
+  Cm_alpha_dot: -4.36
+  Cm_delta_e: -1.122
+  CL_delta_e: 0.355
+lateral_derivatives_nondim:
+  CY_beta: -0.564
+  Cl_beta: -0.074
+  Cn_beta: 0.071
+  Cl_p: -0.410
+  Cn_r: -0.125
+  Cl_r: 0.107
+  Cn_p: -0.0575
+  Cl_delta_a: -0.134
+  Cn_delta_r: -0.074
+  CY_delta_r: 0.157

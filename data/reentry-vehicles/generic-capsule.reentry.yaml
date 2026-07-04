@@ -1,0 +1,11 @@
+name: "Generic Capsule"
+mass_kg: 4200
+ref_area_m2: 12.0
+nose_radius_m: 0.9
+hypersonic:
+  cd: 1.4
+  cl_over_cd: 0.24
+limits:
+  max_heat_flux_w_m2: 1.0e6
+  max_g_load: 8.0
+entry_interface_altitude_m: 120000
