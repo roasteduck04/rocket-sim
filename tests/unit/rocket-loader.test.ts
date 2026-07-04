@@ -126,7 +126,14 @@ describe('loadRocketYaml descent block (README §8.1 + §4.6 mode 3, Phase 4)', 
 
     // Omitted target → origin, 2 m/s (§8.1 reference values).
     const none = loadRocketYaml(baseYaml + controlBlock + descentBlock, tables).control?.landingTarget;
-    expect(none).toEqual({ northM: 0, eastM: 0, touchdownVzMaxMps: 2.0 });
+    expect(none).toEqual({
+      northM: 0,
+      eastM: 0,
+      touchdownVzMaxMps: 2.0,
+      padRadiusM: 15,
+      touchdownTiltMaxRad: (5 * Math.PI) / 180,
+      rudImpactSpeedMps: 25,
+    });
   });
 
   it('omitted descent block → control config without descent guidance', () => {

@@ -16,6 +16,7 @@ import { loadAeroTable } from './aero.js';
 import type {
   ControlConfig,
   DescentGuidanceConfig,
+  EntryBurnConfig,
   LandingTarget,
   RocketConfig,
 } from './types.js';
@@ -142,6 +143,14 @@ export const loadRocketYaml = (yamlText: string, tables: RocketTables): RocketCo
     let descent: DescentGuidanceConfig | undefined;
     if (controlD['descent'] !== undefined) {
       const dD = asObject(controlD['descent'], 'control.descent');
+      let entryBurn: EntryBurnConfig | undefined;
+      if (dD['entry_burn'] !== undefined) {
+        const eD = asObject(dD['entry_burn'], 'control.descent.entry_burn');
+        entryBurn = {
+          igniteAltitudeM: req(eD, 'ignite_altitude_m', 'control.descent.entry_burn'),
+          targetSpeedMps: req(eD, 'target_speed_mps', 'control.descent.entry_burn'),
+        };
+      }
       descent = {
         ratedThrustN: req(dD, 'rated_thrust_n', 'control.descent'),
         ignitionMargin: opt(dD, 'ignition_margin', 0.3),
@@ -149,6 +158,7 @@ export const loadRocketYaml = (yamlText: string, tables: RocketTables): RocketCo
         maxTiltRad: degToRad(opt(dD, 'max_tilt_deg', 8)),
         pidVz: pid(dD, 'pid_vz', 'control.descent'),
         pidPos: pid(dD, 'pid_pos', 'control.descent'),
+        entryBurn,
       };
     }
 
@@ -167,6 +177,9 @@ export const loadRocketYaml = (yamlText: string, tables: RocketTables): RocketCo
         northM: RE * latRad,
         eastM: RE * lonRad * Math.cos(latRad),
         touchdownVzMaxMps: opt(tD, 'touchdown_vz_max_mps', 2.0),
+        padRadiusM: opt(tD, 'pad_radius_m', 15),
+        touchdownTiltMaxRad: degToRad(opt(tD, 'touchdown_tilt_max_deg', 5)),
+        rudImpactSpeedMps: opt(tD, 'rud_impact_speed_mps', 25),
       };
     }
 

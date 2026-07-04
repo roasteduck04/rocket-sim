@@ -163,6 +163,18 @@ export interface AscentGuidanceConfig {
 }
 
 /**
+ * Retrograde entry-burn parameters (landing-sim spec §4). Optional: when the
+ * block is absent the entry-descent guidance skips straight from coast to the
+ * Phase-4 powered descent.
+ */
+export interface EntryBurnConfig {
+  /** Begin the retrograde burn when altitude first drops below this AGL, m. */
+  igniteAltitudeM: number;
+  /** Cut the engine once airspeed falls below this, m/s. */
+  targetSpeedMps: number;
+}
+
+/**
  * Powered-descent guidance parameters (README §4.6 mode 3; plan Phase 4 + A7).
  * The landing engine is modelled as a constant rating `ratedThrustN` scaled by
  * throttle (A7: "descent thrust = rated thrust × throttle"); everything the
@@ -181,6 +193,8 @@ export interface DescentGuidanceConfig {
   pidVz: PidGains;
   /** Horizontal-position PID → tilt command (rad per m, rad per m/s). */
   pidPos: PidGains;
+  /** Optional retrograde entry burn (landing-sim spec §4). */
+  entryBurn?: EntryBurnConfig;
 }
 
 /** Landing target in local NED metres (README §8.1 `landing_target`, A14). */
@@ -189,6 +203,16 @@ export interface LandingTarget {
   eastM: number;
   /** Touchdown acceptance limit on descent rate, m/s (README §10.2.4 gate). */
   touchdownVzMaxMps: number;
+  /**
+   * Landing-pad radius for the missed-pad verdict, m (landing-sim spec §7).
+   * Optional in the type so hand-built test fixtures keep compiling; the YAML
+   * loader always fills it (default 15).
+   */
+  padRadiusM?: number;
+  /** Touchdown tilt limit for the tip-over verdict, rad (loader default 5°). */
+  touchdownTiltMaxRad?: number;
+  /** Impact speed above which touchdown is a RUD, m/s (loader default 25). */
+  rudImpactSpeedMps?: number;
 }
 
 /**
