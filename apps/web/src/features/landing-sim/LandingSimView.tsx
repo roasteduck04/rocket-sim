@@ -73,7 +73,7 @@ const Flight = ({
     [run, cfg],
   );
   const touchdown: TouchdownVisual | null = pb.done
-    ? { verdict, tSince: pb.tSim - pb.duration + 1 } // ≥ 1 s into the animation once done
+    ? { verdict, tSince: pb.tSim - pb.duration } // seconds past touchdown (clock overruns)
     : null;
 
   return (

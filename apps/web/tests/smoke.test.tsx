@@ -41,7 +41,7 @@ describe('app shell', () => {
     ).toHaveLength(4);
   });
 
-  it('switches between all three modules via the tab bar', () => {
+  it('switches between all four modules via the tab bar', () => {
     render(<App />);
     fireEvent.click(screen.getByRole('button', { name: 'B · Reentry' }));
     expect(screen.getByText(/Entry conditions/)).toBeTruthy();

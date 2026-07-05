@@ -1,7 +1,9 @@
 /**
  * Playback clock (landing-sim spec §3): a rAF loop maps wall time × warp →
  * sim time; pause, scrub, warp, and replay are operations on the clock only —
- * the physics already ran, once, in the worker.
+ * the physics already ran, once, in the worker. The clock overruns touchdown
+ * by a few seconds so the verdict animations (canvas touchdown visuals) play
+ * out; samples past `duration` clamp to the last frame.
  */
 
 import { useEffect, useRef, useState } from 'react';
@@ -10,6 +12,9 @@ import { sampleAt, type PlaybackSample } from './playbackMath';
 
 /** Clamp on a single frame's wall delta (tab switches), same as useFixedTimestepLoop. */
 const MAX_FRAME_S = 0.25;
+
+/** Sim seconds the clock keeps running past touchdown (verdict animations). */
+const OVERRUN_S = 4;
 
 export interface Playback {
   sample: PlaybackSample;
@@ -44,9 +49,9 @@ export const usePlayback = (frames: TelemetryFrame[], initialWarp = 5): Playback
     const frame = (now: number): void => {
       if (last !== null && clock.current.playing) {
         const dt = Math.min((now - last) / 1000, MAX_FRAME_S) * clock.current.warp;
-        clock.current.t = Math.min(duration, clock.current.t + dt);
+        clock.current.t = Math.min(duration + OVERRUN_S, clock.current.t + dt);
         setTSim(clock.current.t);
-        if (clock.current.t >= duration) setPlaying(false);
+        if (clock.current.t >= duration + OVERRUN_S) setPlaying(false);
       }
       last = now;
       raf = requestAnimationFrame(frame);
