@@ -3,6 +3,10 @@
  * types live in lib/simWorker.ts with the other module protocols.
  */
 
+import type { CaptureOutcome } from '../../lib/simWorker';
+
+export type { CaptureOutcome };
+
 export type PhaseLabel = 'FREEFALL' | 'ENTRY BURN' | 'LANDING BURN' | 'TOUCHDOWN';
 
 export type VerdictKind =
@@ -28,8 +32,6 @@ export interface EntryInputs {
   downrangeM: number;
   propellantKg: number;
 }
-
-export type CaptureOutcome = 'lands' | 'misses' | 'crashes';
 
 /** Streaming capture-region grid; cells[iH][iV], null = not yet computed. */
 export interface CaptureGrid {

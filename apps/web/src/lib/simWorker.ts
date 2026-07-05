@@ -9,7 +9,12 @@
  * (unitsDisplay.ts).
  */
 
-import type { LandingScenario, RunSummary, TelemetryFrame } from '@fds/rocket-sim';
+import type {
+  EntryScenario,
+  LandingScenario,
+  RunSummary,
+  TelemetryFrame,
+} from '@fds/rocket-sim';
 import type { ReentryFrame, ReentryPeaks } from '@fds/reentry-sim';
 
 /** Uniform failure message from either worker. */
@@ -88,6 +93,54 @@ export interface CorridorDone {
 
 export type ReentryResponse = ReentryRunResult | CorridorPointMsg | CorridorDone | WorkerFailure;
 
+// --- Module D: entry-descent landing sim (landing-sim spec §3) ---------------
+
+export interface EntryRunRequest {
+  kind: 'entry-run';
+  scenario: EntryScenario;
+  /** Record every Nth 0.01 s step (2 ⇒ 50 Hz playback frames). */
+  sampleEvery: number;
+}
+
+/** Capture-region sweep at fixed γ/downrange/propellant over a v×h grid. */
+export interface CaptureRequest {
+  kind: 'capture';
+  gammaRad: number;
+  downrangeM: number;
+  propellantKg: number;
+  vRange: [number, number];
+  hRange: [number, number];
+  nV: number;
+  nH: number;
+}
+
+export type LandingSimRequest = EntryRunRequest | CaptureRequest;
+
+export interface EntryRunResult {
+  kind: 'entry-result';
+  telemetry: TelemetryFrame[];
+  summary: RunSummary;
+  entryBurnIgnitionTime: number | null;
+  entryBurnCutoffTime: number | null;
+  landingIgnitionTime: number | null;
+}
+
+export type CaptureOutcome = 'lands' | 'misses' | 'crashes';
+
+/** One capture cell, streamed as soon as its coarse run finishes. */
+export interface CaptureCellMsg {
+  kind: 'capture-cell';
+  iV: number;
+  iH: number;
+  outcome: CaptureOutcome;
+}
+
+export interface CaptureDone {
+  kind: 'capture-done';
+}
+
+export type LandingSimResponse = EntryRunResult | CaptureCellMsg | CaptureDone | WorkerFailure;
+
 // --- factories ---------------------------------------------------------------
 
 export const createRocketWorker = (): Worker =>
@@ -95,3 +148,6 @@ export const createRocketWorker = (): Worker =>
 
 export const createReentryWorker = (): Worker =>
   new Worker(new URL('../workers/corridor.worker.ts', import.meta.url), { type: 'module' });
+
+export const createLandingSimWorker = (): Worker =>
+  new Worker(new URL('../workers/descent.worker.ts', import.meta.url), { type: 'module' });
