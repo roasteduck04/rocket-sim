@@ -1,14 +1,14 @@
 /**
  * Continuous dynamic-zoom camera (landing-sim spec §6): the vertical view
  * window shrinks with altitude — H_view = clamp(K·h, H_MIN, H_MAX) — with the
- * rocket anchored at ROCKET_ANCHOR of frame height until the ground rises
- * into frame (hLow clamps at 0), so touchdown composes itself. Pure math:
- * unit-testable without a canvas.
+ * rocket anchored at ROCKET_ANCHOR of frame height; hLow may go negative
+ * (frame bottom below ground level), which keeps the anchor exact all the
+ * way to touchdown. Pure math: unit-testable without a canvas.
  */
 
 export interface CameraView {
   metersPerPx: number;
-  /** World altitude at the bottom edge of the frame, m. */
+  /** World altitude at the bottom edge of the frame, m (negative once the frame bottom is below ground). */
   hLow: number;
   /** World north coordinate at the horizontal center, m. */
   centerN: number;
