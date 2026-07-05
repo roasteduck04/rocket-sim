@@ -36,7 +36,9 @@ describe('app shell', () => {
     render(<App />);
     expect(screen.getByText(/Flight Dynamics & Controls Simulation Suite/)).toBeTruthy();
     expect(screen.getByTestId('trajectory-scene-stub')).toBeTruthy();
-    expect(screen.getAllByRole('button', { name: /· (Rocket|Reentry|Aircraft)/ })).toHaveLength(3);
+    expect(
+      screen.getAllByRole('button', { name: /· (Rocket|Reentry|Aircraft|Landing)/ }),
+    ).toHaveLength(4);
   });
 
   it('switches between all three modules via the tab bar', () => {
@@ -45,6 +47,8 @@ describe('app shell', () => {
     expect(screen.getByText(/Entry conditions/)).toBeTruthy();
     fireEvent.click(screen.getByRole('button', { name: 'C · Aircraft' }));
     expect(screen.getByText(/Aircraft & trim/)).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: 'D · Landing' }));
+    expect(screen.getByText(/Entry point/)).toBeTruthy();
     fireEvent.click(screen.getByRole('button', { name: 'A · Rocket' }));
     expect(screen.getByTestId('trajectory-scene-stub')).toBeTruthy();
   });
@@ -83,5 +87,14 @@ describe('module C — aircraft view', () => {
     expect(screen.getAllByText(/Short period/).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/Phugoid/).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/Dutch roll/).length).toBeGreaterThan(0);
+  });
+});
+
+describe('module D — landing sim', () => {
+  it('mounts in setup mode with the entry-point panel and a Launch button', async () => {
+    const { LandingSimView } = await import('../src/features/landing-sim/LandingSimView');
+    render(<LandingSimView />);
+    expect(screen.getByText(/Entry point/)).toBeTruthy();
+    expect(screen.getByRole('button', { name: /Launch/ })).toBeTruthy();
   });
 });

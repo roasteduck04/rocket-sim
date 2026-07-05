@@ -349,3 +349,36 @@ table.modal-table td:first-child {
   color: var(--ink-2);
   background: var(--page);
 }
+
+/* --- D · Landing (landing-sim spec §5) ------------------------------------ */
+.landing-layout {
+  display: grid;
+  gap: 16px;
+}
+.landing-flight {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 16px;
+  align-items: start;
+}
+.landing-canvas-wrap {
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.landing-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.landing-controls input[type='range'] {
+  flex: 1;
+  min-width: 160px;
+}
+.landing-verdict {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+}

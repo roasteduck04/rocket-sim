@@ -8,13 +8,15 @@ import { useState, type JSX } from 'react';
 import { RocketView } from './modules/rocket/RocketView';
 import { ReentryView } from './modules/reentry/ReentryView';
 import { AircraftView } from './modules/aircraft/AircraftView';
+import { LandingSimView } from './features/landing-sim/LandingSimView';
 
-type ModuleId = 'rocket' | 'reentry' | 'aircraft';
+type ModuleId = 'rocket' | 'reentry' | 'aircraft' | 'landing';
 
 const TABS: ReadonlyArray<{ id: ModuleId; label: string }> = [
   { id: 'rocket', label: 'A · Rocket' },
   { id: 'reentry', label: 'B · Reentry' },
   { id: 'aircraft', label: 'C · Aircraft' },
+  { id: 'landing', label: 'D · Landing' },
 ];
 
 export default function App(): JSX.Element {
@@ -42,6 +44,7 @@ export default function App(): JSX.Element {
         {active === 'rocket' && <RocketView />}
         {active === 'reentry' && <ReentryView />}
         {active === 'aircraft' && <AircraftView />}
+        {active === 'landing' && <LandingSimView />}
       </main>
     </div>
   );
