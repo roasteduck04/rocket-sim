@@ -46,5 +46,10 @@ control:
     pid_vz:  { kp: 0.15, ki: 0.05, kd: 0.0 }    # throttle per (m/s)
     pid_pos: { kp: 0.004, ki: 0.0, kd: 0.03 }   # tilt (rad) per m, per (m/s)
     entry_burn:                  # retrograde entry burn (landing-sim spec §4)
-      ignite_altitude_m: 12000
-      target_speed_mps: 300
+      # Tuned for the landing sim's default capture region (aero-neglected
+      # descent model): burn retrograde from entry (the selector's altitude
+      # ceiling) down to a deep 145 m/s cutoff — the long retrograde burn is
+      # what kills the lateral velocity of a gamma = -70 deg entry; the 8 deg
+      # tilt position loop only trims the residue.
+      ignite_altitude_m: 25000
+      target_speed_mps: 145

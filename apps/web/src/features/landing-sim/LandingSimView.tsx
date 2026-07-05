@@ -24,7 +24,7 @@ export const DEFAULT_INPUTS: EntryInputs = {
   altitudeM: 15000,
   speedMps: 400,
   gammaRad: (-70 * Math.PI) / 180,
-  downrangeM: 3000,
+  downrangeM: 500,
   propellantKg: 1500,
 };
 
