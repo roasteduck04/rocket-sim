@@ -5,14 +5,16 @@
  */
 
 import { useState, type JSX } from 'react';
+import { OverviewView } from './features/overview/OverviewView';
 import { RocketView } from './modules/rocket/RocketView';
 import { ReentryView } from './modules/reentry/ReentryView';
 import { AircraftView } from './modules/aircraft/AircraftView';
 import { LandingSimView } from './features/landing-sim/LandingSimView';
 
-type ModuleId = 'rocket' | 'reentry' | 'aircraft' | 'landing';
+type ModuleId = 'overview' | 'rocket' | 'reentry' | 'aircraft' | 'landing';
 
 const TABS: ReadonlyArray<{ id: ModuleId; label: string }> = [
+  { id: 'overview', label: 'Overview' },
   { id: 'rocket', label: 'A · Rocket' },
   { id: 'reentry', label: 'B · Reentry' },
   { id: 'aircraft', label: 'C · Aircraft' },
@@ -20,7 +22,7 @@ const TABS: ReadonlyArray<{ id: ModuleId; label: string }> = [
 ];
 
 export default function App(): JSX.Element {
-  const [active, setActive] = useState<ModuleId>('rocket');
+  const [active, setActive] = useState<ModuleId>('overview');
 
   return (
     <div>
@@ -41,6 +43,7 @@ export default function App(): JSX.Element {
         </nav>
       </header>
       <main className="module">
+        {active === 'overview' && <OverviewView onEnter={setActive} />}
         {active === 'rocket' && <RocketView />}
         {active === 'reentry' && <ReentryView />}
         {active === 'aircraft' && <AircraftView />}

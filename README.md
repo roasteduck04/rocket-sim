@@ -42,7 +42,7 @@ npm install
 npm run dev:web
 ```
 
-This starts the Vite dev server; open the printed URL (default <http://localhost:5173>). The app opens on **Module A — Rocket** with a tab bar to switch between Modules A/B/C and **D · Landing**. Hot-module reload is on, so edits under `apps/web/src` refresh live.
+This starts the Vite dev server; open the printed URL (default <http://localhost:5173>). The app opens on the **Overview** — a flight-envelope map of the whole suite; click a regime (or a module card) to enter it. A tab bar switches between the Overview and Modules A/B/C and **D · Landing**. Hot-module reload is on, so edits under `apps/web/src` refresh live.
 
 **Build the web app** (type-checks with `tsc` first, then bundles to `apps/web/dist`):
 

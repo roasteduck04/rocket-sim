@@ -38,6 +38,19 @@
   --l-amber-dim: rgba(245, 181, 46, 0.14);
   --l-display: 'Saira Condensed', 'Saira', system-ui, sans-serif;
   --l-mono: 'Space Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
+
+  /* Suite Overview — front door. Deep instrument void + hairline blueprint
+     grid; the four module accents are the only saturated marks. Scoped to
+     .ov-*; mirrors OVERVIEW in lib/palette.ts so the envelope SVG matches. */
+  --ov-void: #06070a;
+  --ov-panel: #0d0f15;
+  --ov-line: rgba(150, 180, 210, 0.1);
+  --ov-line-2: rgba(150, 180, 210, 0.2);
+  --ov-ink: #e9edf3;
+  --ov-ink-2: #97a1b0;
+  --ov-muted: #59616e;
+  --ov-display: 'Saira Condensed', 'Saira', system-ui, sans-serif;
+  --ov-mono: 'Space Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
 }
 
 * {
@@ -787,5 +800,306 @@ table.modal-table td:first-child {
   }
   .lc-btn {
     transition: none;
+  }
+}
+
+/* ========================================================================
+ * Suite Overview — front door
+ * The app's landing page + launcher (plan: flight-envelope front door). Its
+ * signature is the flight-envelope plot (EnvelopeMap): the four modules as
+ * plotted regimes you click to enter. Deep instrument void, hairline blueprint
+ * grid, the four module accents as the only saturated marks. Saira Condensed
+ * signage + Space Mono numerics. Scoped entirely to .ov-* / --ov-* — shared
+ * .app-header/.tab-bar/.panel/.stat/.chip/.btn are untouched. Motion is a
+ * one-time staggered plot-in; reduced-motion-safe (see @media at the end).
+ * ======================================================================== */
+
+.ov {
+  max-width: 1180px;
+  margin: 0 auto;
+  color: var(--ov-ink);
+}
+
+/* --- hero: copy + envelope plot --------------------------------------- */
+.ov-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 600px);
+  gap: 2.4rem;
+  align-items: center;
+  padding: 1.5rem 0 2.2rem;
+}
+@media (max-width: 900px) {
+  .ov-hero {
+    grid-template-columns: 1fr;
+    gap: 1.6rem;
+  }
+}
+
+.ov-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin: 0 0 1rem;
+  font-family: var(--ov-display);
+  font-weight: 600;
+  font-size: 0.76rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ov-ink-2);
+}
+.ov-eyebrow::before {
+  content: '';
+  width: 16px;
+  height: 2px;
+  background: var(--ov-ink-2);
+}
+
+.ov-headline {
+  margin: 0 0 1.1rem;
+  font-family: var(--ov-display);
+  font-weight: 700;
+  font-size: clamp(2.1rem, 5vw, 3.5rem);
+  line-height: 0.98;
+  letter-spacing: 0.005em;
+  text-transform: uppercase;
+  color: var(--ov-ink);
+}
+.ov-headline span {
+  display: block;
+  color: var(--ov-ink-2);
+}
+
+.ov-deck {
+  margin: 0;
+  max-width: 46ch;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--ov-ink-2);
+}
+
+.ov-plot {
+  margin: 0;
+  background: var(--ov-panel);
+  border: 1px solid var(--ov-line);
+  border-radius: 5px;
+  padding: 0.75rem 0.85rem 0.6rem;
+}
+.ov-plot-cap {
+  margin: 0 0 0.4rem;
+  font-family: var(--ov-display);
+  font-weight: 500;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ov-muted);
+}
+.ov-envelope-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* interactive envelope waypoints (SVG groups) */
+.ov-wp {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ov-plot-in 0.5s ease both;
+}
+.ov-wp:focus {
+  outline: none;
+}
+.ov-wp:focus-visible {
+  outline: 2px solid var(--ov-ink);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+@keyframes ov-plot-in {
+  from {
+    opacity: 0;
+    transform: scale(0.55);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* --- credibility strip -------------------------------------------------- */
+.ov-cred {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 1.4rem;
+  align-items: center;
+  margin: 0;
+  padding: 0.75rem 0.2rem;
+  list-style: none;
+  border-top: 1px solid var(--ov-line);
+  border-bottom: 1px solid var(--ov-line);
+  font-family: var(--ov-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ov-ink-2);
+}
+.ov-cred li {
+  display: flex;
+  align-items: center;
+  gap: 1.4rem;
+}
+.ov-cred li:not(:last-child)::after {
+  content: '';
+  width: 1px;
+  height: 11px;
+  background: var(--ov-line-2);
+}
+
+/* --- module launcher cards --------------------------------------------- */
+.ov-cards {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  padding: 2rem 0 0;
+}
+@media (max-width: 900px) {
+  .ov-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 520px) {
+  .ov-cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ov-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  min-height: 190px;
+  padding: 1rem 1rem 0.9rem;
+  text-align: left;
+  background: var(--ov-panel);
+  border: 1px solid var(--ov-line);
+  border-top: 2px solid var(--accent);
+  border-radius: 6px;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+}
+.ov-card:hover,
+.ov-card.is-lit,
+.ov-card:focus-visible {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent), 0 8px 24px -12px var(--accent);
+  transform: translateY(-2px);
+}
+.ov-card:focus-visible {
+  outline: none;
+}
+
+.ov-card-head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+.ov-card-code {
+  font-family: var(--ov-display);
+  font-weight: 700;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--accent);
+}
+.ov-card-name {
+  font-family: var(--ov-display);
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ov-ink);
+}
+.ov-card-tag {
+  flex: 1;
+  font-size: 0.84rem;
+  line-height: 1.4;
+  color: var(--ov-ink-2);
+}
+.ov-card-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+.ov-chip {
+  font-family: var(--ov-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--ov-muted);
+  border: 1px solid var(--ov-line);
+  border-radius: 3px;
+  padding: 0.15rem 0.4rem;
+}
+.ov-card-go {
+  font-family: var(--ov-display);
+  font-weight: 600;
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: opacity 0.15s, transform 0.15s;
+}
+.ov-card:hover .ov-card-go,
+.ov-card.is-lit .ov-card-go,
+.ov-card:focus-visible .ov-card-go {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* --- footer ------------------------------------------------------------- */
+.ov-foot {
+  margin: 2.4rem 0 0;
+  padding: 1.1rem 0 0;
+  border-top: 1px solid var(--ov-line);
+  color: var(--ov-muted);
+  font-size: 0.82rem;
+}
+.ov-foot p {
+  margin: 0 0 0.5rem;
+  max-width: 60ch;
+}
+.ov-foot-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.2rem;
+  align-items: center;
+  font-family: var(--ov-mono);
+  font-size: 0.76rem;
+}
+.ov-foot-meta a {
+  color: var(--ov-ink-2);
+  text-decoration: none;
+  border-bottom: 1px solid var(--ov-line-2);
+}
+.ov-foot-meta a:hover {
+  color: var(--ov-ink);
+}
+.ov-foot-cmd {
+  color: var(--ov-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ov-wp {
+    animation: none;
+  }
+  .ov-card,
+  .ov-card-go {
+    transition: none;
+  }
+  .ov-card:hover,
+  .ov-card.is-lit,
+  .ov-card:focus-visible {
+    transform: none;
   }
 }

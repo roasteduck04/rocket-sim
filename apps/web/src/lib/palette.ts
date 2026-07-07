@@ -56,3 +56,20 @@ export const LANDING = {
   /** Day-blue sky at the deck (blends to `void` at altitude). */
   sky: '#6f9fce',
 } as const;
+
+/**
+ * Suite Overview front door (mirrors the `--ov-*` custom properties in
+ * styles.css). A deep instrument void with a hairline blueprint grid; the four
+ * module accents (imported from SERIES/STATUS/LANDING above) are the only
+ * saturated marks on the flight-envelope plot, each coding one regime. Imported
+ * by EnvelopeMap.tsx so the SVG base/grid/ink match the CSS chrome exactly.
+ */
+export const OVERVIEW = {
+  void: '#06070a',
+  panel: '#0d0f15',
+  line: 'rgba(150, 180, 210, 0.10)',
+  line2: 'rgba(150, 180, 210, 0.20)',
+  ink: '#e9edf3',
+  ink2: '#97a1b0',
+  muted: '#59616e',
+} as const;

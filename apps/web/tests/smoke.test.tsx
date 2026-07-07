@@ -32,13 +32,17 @@ import { AircraftView } from '../src/modules/aircraft/AircraftView';
 afterEach(cleanup);
 
 describe('app shell', () => {
-  it('renders the header and mounts the rocket module by default', () => {
+  it('lands on the overview by default and enters a module from it', () => {
     render(<App />);
     expect(screen.getByText(/Flight Dynamics & Controls Simulation Suite/)).toBeTruthy();
-    expect(screen.getByTestId('trajectory-scene-stub')).toBeTruthy();
+    // Default front door: the flight-envelope map + the four module tabs.
+    expect(screen.getByRole('group', { name: /Flight envelope/ })).toBeTruthy();
     expect(
       screen.getAllByRole('button', { name: /· (Rocket|Reentry|Aircraft|Landing)/ }),
     ).toHaveLength(4);
+    // Clicking a module launcher (card or envelope waypoint) enters that module.
+    fireEvent.click(screen.getAllByRole('button', { name: /Enter Module A — Rocket/ })[0]);
+    expect(screen.getByTestId('trajectory-scene-stub')).toBeTruthy();
   });
 
   it('switches between all four modules via the tab bar', () => {
