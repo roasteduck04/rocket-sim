@@ -34,3 +34,25 @@ export const STATUS = {
   serious: '#ec835a',
   critical: '#d03b3b',
 } as const;
+
+/**
+ * D · Landing console identity (mirrors the `--l-*` custom properties in
+ * styles.css). A cooler, darker instrument base than the shared cockpit chrome,
+ * with a warm ignition-amber accent that ties the UI to the burn. Imported by
+ * the landing-sim SVG/canvas so JS marks and CSS stay in sync. The green/amber/
+ * red outcome triad above (STATUS) stays purely semantic — `amber` here is a
+ * chrome accent, never a caution signal.
+ */
+export const LANDING = {
+  void: '#07080b',
+  panel: '#0f1117',
+  panel2: '#141821',
+  ink: '#e8ecf2',
+  ink2: '#9aa4b2',
+  muted: '#5f6875',
+  amber: '#f5b52e',
+  /** Deep slate for the ground plane in the canvas. */
+  ground: '#12151c',
+  /** Day-blue sky at the deck (blends to `void` at altitude). */
+  sky: '#6f9fce',
+} as const;

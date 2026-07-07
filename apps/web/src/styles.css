@@ -22,6 +22,22 @@
   --warning: #fab219;
   --serious: #ec835a;
   --critical: #d03b3b;
+
+  /* D · Landing console identity — cooler/darker instrument base + ignition
+     amber accent. Scoped to the landing-sim; mirrors LANDING in lib/palette.ts.
+     Fonts bundled via @fontsource (see main.tsx). */
+  --l-void: #07080b;
+  --l-panel: #0f1117;
+  --l-panel-2: #141821;
+  --l-line: rgba(180, 200, 220, 0.1);
+  --l-line-2: rgba(180, 200, 220, 0.18);
+  --l-ink: #e8ecf2;
+  --l-ink-2: #9aa4b2;
+  --l-muted: #5f6875;
+  --l-amber: #f5b52e;
+  --l-amber-dim: rgba(245, 181, 46, 0.14);
+  --l-display: 'Saira Condensed', 'Saira', system-ui, sans-serif;
+  --l-mono: 'Space Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
 }
 
 * {
@@ -350,35 +366,426 @@ table.modal-table td:first-child {
   background: var(--page);
 }
 
-/* --- D · Landing (landing-sim spec §5) ------------------------------------ */
+/* ==========================================================================
+ * D · Landing — mission-control flight console
+ * A self-contained visual identity for Module D (README §7). Cooler/darker
+ * instrument base than the shared cockpit chrome; ignition-amber accent tied to
+ * the burn; hairline readouts + condensed labels + Space Mono numerics. Scoped
+ * entirely under .landing-* / .lc-* — the shared .panel/.stat/.chip/.btn rules
+ * (modules A/B/C) are untouched. Tokens: --l-* above; colors mirror LANDING in
+ * lib/palette.ts so the SVG/canvas match. Motion is minimal and reduced-motion
+ * safe (see @media at the end of this block).
+ * ======================================================================== */
+
 .landing-layout {
   display: grid;
   gap: 16px;
 }
 .landing-flight {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 300px;
+  grid-template-columns: minmax(0, 1fr) 316px;
   gap: 16px;
   align-items: start;
 }
+@media (max-width: 820px) {
+  .landing-flight {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* --- console panel primitive ------------------------------------------- */
+.lc {
+  background: var(--l-panel);
+  border: 1px solid var(--l-line);
+  border-radius: 4px;
+}
+.lc-eyebrow {
+  font-family: var(--l-display);
+  font-weight: 600;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--l-ink-2);
+  margin: 0 0 0.7rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.lc-eyebrow::before {
+  /* small tally mark, an instrument-panel tic */
+  content: '';
+  width: 10px;
+  height: 2px;
+  background: var(--l-amber);
+}
+
+/* --- flight canvas + transport ----------------------------------------- */
 .landing-canvas-wrap {
   position: relative;
-  border-radius: 10px;
+  border-radius: 4px;
   overflow: hidden;
+  border: 1px solid var(--l-line);
+  background: var(--l-void);
+}
+/* The canvas keeps the shared .scene-canvas class (modules A/B); drop its own
+   border/radius/height here so the wrap frames it cleanly. */
+.landing-canvas-wrap .scene-canvas {
+  border: 0;
+  border-radius: 0;
+  height: auto;
+  background: var(--l-void);
 }
 .landing-controls {
   display: flex;
   align-items: center;
   gap: 8px;
   flex-wrap: wrap;
+  padding: 10px;
+  background: var(--l-panel);
+  border-top: 1px solid var(--l-line);
 }
-.landing-controls input[type='range'] {
+.lc-btn {
+  font-family: var(--l-display);
+  font-weight: 600;
+  font-size: 0.82rem;
+  letter-spacing: 0.06em;
+  color: var(--l-ink-2);
+  background: var(--l-panel-2);
+  border: 1px solid var(--l-line-2);
+  border-radius: 3px;
+  padding: 0.36rem 0.6rem;
+  min-width: 2.1rem;
+  cursor: pointer;
+  transition: color 0.12s, border-color 0.12s, background 0.12s;
+}
+.lc-btn:hover {
+  color: var(--l-ink);
+  border-color: var(--l-muted);
+}
+.lc-btn.is-active {
+  color: var(--l-amber);
+  border-color: var(--l-amber);
+  background: var(--l-amber-dim);
+}
+.lc-btn--play {
+  font-size: 0.9rem;
+  min-width: 2.4rem;
+}
+.lc-scrub {
   flex: 1;
-  min-width: 160px;
+  min-width: 140px;
+  accent-color: var(--l-amber);
 }
-.landing-verdict {
+:where(.landing-flight, .landing-layout) :focus-visible {
+  outline: 2px solid var(--l-amber);
+  outline-offset: 2px;
+}
+
+/* --- verdict plate (revealed at touchdown) ----------------------------- */
+.lc-verdict {
   position: absolute;
-  top: 12px;
+  top: 14px;
   left: 50%;
   transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--l-display);
+  font-weight: 600;
+  font-size: 0.82rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.4rem 0.9rem;
+  border-radius: 3px;
+  background: rgba(7, 8, 11, 0.82);
+  border: 1px solid currentColor;
+  backdrop-filter: blur(2px);
+  animation: lc-plate 0.5s ease-out;
+}
+.lc-verdict .lc-verdict-glyph {
+  font-size: 1rem;
+  line-height: 1;
+}
+.lc-verdict.is-good {
+  color: var(--good);
+}
+.lc-verdict.is-warn {
+  color: var(--warning);
+}
+.lc-verdict.is-crit {
+  color: var(--critical);
+}
+@keyframes lc-plate {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -6px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+/* --- mission spine: hero clock + phase ladder -------------------------- */
+.lc-rail {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.lc-spine {
+  padding: 0.95rem 1rem 1.05rem;
+}
+.lc-clock-label {
+  font-family: var(--l-display);
+  font-weight: 500;
+  font-size: 0.68rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--l-muted);
+  margin: 0;
+}
+.lc-clock {
+  font-family: var(--l-mono);
+  font-weight: 700;
+  font-size: 2.35rem;
+  line-height: 1.05;
+  letter-spacing: 0.01em;
+  font-variant-numeric: tabular-nums;
+  color: var(--l-amber);
+  margin: 0.05rem 0 0.9rem;
+}
+.lc-clock.is-done {
+  color: var(--l-ink-2);
+}
+.lc-ladder {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.lc-ladder-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.34rem 0;
+  font-family: var(--l-display);
+  font-weight: 600;
+  font-size: 0.86rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--l-muted);
+}
+.lc-node {
+  position: relative;
+  flex: none;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  border: 1.5px solid var(--l-muted);
+  background: transparent;
+  z-index: 1;
+}
+/* connector between successive nodes */
+.lc-ladder-item:not(:last-child) .lc-node::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  transform: translateX(-50%);
+  width: 1.5px;
+  height: calc(0.68rem + 1px);
+  background: var(--l-line-2);
+}
+.lc-ladder-item.is-past {
+  color: var(--l-ink-2);
+}
+.lc-ladder-item.is-past .lc-node {
+  border-color: var(--l-ink-2);
+  background: var(--l-ink-2);
+}
+.lc-ladder-item.is-past .lc-node::after {
+  background: var(--l-ink-2);
+}
+.lc-ladder-item.is-active {
+  color: var(--l-amber);
+}
+.lc-ladder-item.is-active .lc-node {
+  border-color: var(--l-amber);
+  background: var(--l-amber);
+  box-shadow: 0 0 0 4px var(--l-amber-dim);
+}
+.lc-tminus {
+  margin-left: auto;
+  font-family: var(--l-mono);
+  font-size: 0.72rem;
+  color: var(--l-muted);
+  font-variant-numeric: tabular-nums;
+}
+.lc-ladder-item.is-active .lc-tminus {
+  color: var(--l-amber);
+}
+
+/* --- telemetry readout ------------------------------------------------- */
+.lc-readout {
+  padding: 0.95rem 1rem 1.05rem;
+}
+.lc-group + .lc-group {
+  margin-top: 0.9rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--l-line);
+}
+.lc-group-title {
+  font-family: var(--l-display);
+  font-weight: 500;
+  font-size: 0.66rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--l-muted);
+  margin: 0 0 0.4rem;
+}
+.lc-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 0.24rem 0;
+  border-bottom: 1px solid var(--l-line);
+}
+.lc-row:last-child {
+  border-bottom: 0;
+}
+.lc-k {
+  font-family: var(--l-display);
+  font-weight: 500;
+  font-size: 0.82rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--l-ink-2);
+}
+/* Symbols keep their true case — uppercasing mangles the aerospace notation
+   (γ→Γ, θ→Θ, q̄→Q̄). Used inside .lc-k / .lc-slider-k labels. */
+.lc-sym {
+  text-transform: none;
+}
+.lc-val {
+  font-family: var(--l-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--l-ink);
+  white-space: nowrap;
+}
+.lc-v {
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+.lc-u {
+  font-size: 0.72rem;
+  color: var(--l-muted);
+  margin-left: 0.3rem;
+}
+.lc-row.is-hot .lc-v {
+  color: var(--l-amber);
+}
+
+/* --- setup: flight-envelope selector ----------------------------------- */
+.lc-envelope {
+  padding: 0.95rem 1rem 1.05rem;
+  max-width: 560px;
+}
+.lc-envelope svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.lc-slider {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: baseline;
+  gap: 0.4rem 0.6rem;
+  margin-top: 0.85rem;
+}
+.lc-slider-k {
+  font-family: var(--l-display);
+  font-weight: 500;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--l-ink-2);
+}
+.lc-slider-v {
+  font-family: var(--l-mono);
+  font-weight: 700;
+  font-size: 0.86rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--l-amber);
+  text-align: right;
+}
+.lc-slider input[type='range'] {
+  grid-column: 1 / -1;
+  width: 100%;
+  accent-color: var(--l-amber);
+}
+.lc-launch-row {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+  margin-top: 1.1rem;
+}
+.lc-launch {
+  font-family: var(--l-display);
+  font-weight: 700;
+  font-size: 0.9rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--l-void);
+  background: var(--l-amber);
+  border: 1px solid var(--l-amber);
+  border-radius: 3px;
+  padding: 0.5rem 1.5rem;
+  cursor: pointer;
+  transition: filter 0.12s;
+}
+.lc-launch:hover:not(:disabled) {
+  filter: brightness(1.1);
+}
+.lc-launch:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.lc-legend {
+  display: flex;
+  gap: 0.9rem;
+  flex-wrap: wrap;
+  font-family: var(--l-display);
+  font-size: 0.74rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--l-muted);
+}
+.lc-legend b {
+  font-weight: 600;
+}
+.lc-legend .k-lands {
+  color: var(--good);
+}
+.lc-legend .k-miss {
+  color: var(--warning);
+}
+.lc-legend .k-crash {
+  color: var(--critical);
+}
+.lc-status {
+  font-family: var(--l-mono);
+  font-size: 0.78rem;
+  color: var(--l-ink-2);
+  margin: 0.4rem 0 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lc-verdict {
+    animation: none;
+  }
+  .lc-btn {
+    transition: none;
+  }
 }

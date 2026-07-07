@@ -48,7 +48,7 @@ describe('app shell', () => {
     fireEvent.click(screen.getByRole('button', { name: 'C · Aircraft' }));
     expect(screen.getByText(/Aircraft & trim/)).toBeTruthy();
     fireEvent.click(screen.getByRole('button', { name: 'D · Landing' }));
-    expect(screen.getByText(/Entry point/)).toBeTruthy();
+    expect(screen.getByText(/Flight Envelope/)).toBeTruthy();
     fireEvent.click(screen.getByRole('button', { name: 'A · Rocket' }));
     expect(screen.getByTestId('trajectory-scene-stub')).toBeTruthy();
   });
@@ -94,7 +94,7 @@ describe('module D — landing sim', () => {
   it('mounts in setup mode with the entry-point panel and a Launch button', async () => {
     const { LandingSimView } = await import('../src/features/landing-sim/LandingSimView');
     render(<LandingSimView />);
-    expect(screen.getByText(/Entry point/)).toBeTruthy();
+    expect(screen.getByText(/Flight Envelope/)).toBeTruthy();
     expect(screen.getByRole('button', { name: /Launch/ })).toBeTruthy();
   });
 });

@@ -7,7 +7,7 @@
  */
 
 import { useEffect, useRef, type JSX } from 'react';
-import { INK_2, MUTED, STATUS } from '../../lib/palette';
+import { INK_2, LANDING, MUTED, STATUS } from '../../lib/palette';
 import { cameraFor, worldToScreen } from './camera';
 import type { PlaybackSample } from './playbackMath';
 import type { Verdict } from './types';
@@ -43,14 +43,15 @@ export const drawScene = (
   const H = CANVAS_H;
   const cam = cameraFor(sample.altitudeM, sample.northM, H);
 
-  // Sky: space-black above 20 km blending to day blue at the deck.
-  ctx.fillStyle = mix('#87b7e4', '#05070f', sample.altitudeM / 20000);
+  // Sky: space-black above 20 km blending to day blue at the deck. Matched to
+  // the console's --l-void base so the canvas reads as one instrument.
+  ctx.fillStyle = mix(LANDING.sky, LANDING.void, sample.altitudeM / 20000);
   ctx.fillRect(0, 0, W, H);
 
   // Ground + pad (world altitude 0), visible once inside the window.
   const ground = worldToScreen(0, 0, cam, W, H);
   if (ground.y <= H + 2) {
-    ctx.fillStyle = '#131811';
+    ctx.fillStyle = LANDING.ground;
     ctx.fillRect(0, ground.y, W, H - ground.y + 2);
     const pad = worldToScreen(0, 0, cam, W, H); // pad at north 0 (landing target)
     const padRpx = Math.max(6, 15 / cam.metersPerPx);
@@ -80,8 +81,8 @@ export const drawScene = (
       const flick = 1 + 0.08 * Math.sin(40 * sample.t);
       const flameLen = lenPx * 0.9 * sample.throttle * flick;
       const grad = ctx.createLinearGradient(0, lenPx / 2, 0, lenPx / 2 + flameLen);
-      grad.addColorStop(0, STATUS.warning);
-      grad.addColorStop(1, 'rgba(236,131,90,0)');
+      grad.addColorStop(0, LANDING.amber);
+      grad.addColorStop(1, 'rgba(245,181,46,0)');
       ctx.fillStyle = grad;
       ctx.beginPath();
       ctx.moveTo(-wPx * 0.45, lenPx / 2);
@@ -183,7 +184,7 @@ export const drawScene = (
         ctx.stroke();
         ctx.setLineDash([]);
         ctx.fillStyle = STATUS.warning;
-        ctx.font = '12px system-ui, sans-serif';
+        ctx.font = "12px 'Space Mono', ui-monospace, monospace";
         ctx.fillText(
           `${Math.abs(sample.northM).toFixed(0)} m`,
           (pad.x + site.x) / 2 + 6,

@@ -8,19 +8,56 @@ This document is both a product spec and an implementation guide. It defines the
 
 ## Table of Contents
 
+- [Getting Started](#getting-started)
 1. [Project Philosophy](#1-project-philosophy)
 2. [Repository Structure](#2-repository-structure)
 3. [Shared Foundations](#3-shared-foundations)
 4. [Module A — 6-DOF Rocket Flight Simulator](#4-module-a--6-dof-rocket-flight-simulator)
 5. [Module B — Reentry Vehicle Simulator](#5-module-b--reentry-vehicle-simulator)
 6. [Module C — Linearized Aircraft Flight Dynamics Model](#6-module-c--linearized-aircraft-flight-dynamics-model)
-7. [Tech Stack & Architecture](#7-tech-stack--architecture)
-8. [Data Schemas](#8-data-schemas)
-9. [UI / Visualization Spec](#9-ui--visualization-spec)
-10. [Validation & Test Suite](#10-validation--test-suite)
-11. [Build Roadmap](#11-build-roadmap)
-12. [Symbol Glossary](#12-symbol-glossary)
-13. [References](#13-references)
+7. [Module D — Landing Simulator](#7-module-d--landing-simulator)
+8. [Tech Stack & Architecture](#8-tech-stack--architecture)
+9. [Data Schemas](#9-data-schemas)
+10. [UI / Visualization Spec](#10-ui--visualization-spec)
+11. [Validation & Test Suite](#11-validation--test-suite)
+12. [Build Roadmap](#12-build-roadmap)
+13. [Symbol Glossary](#13-symbol-glossary)
+14. [References](#14-references)
+
+---
+
+## Getting Started
+
+The suite is a TypeScript monorepo using **npm workspaces** (`packages/*` for the physics/sim libraries, `apps/web` for the interactive front-end). Node 20+ is recommended.
+
+**Install** (once, from the repo root — installs every workspace):
+
+```bash
+npm install
+```
+
+**Run the web app locally:**
+
+```bash
+npm run dev:web
+```
+
+This starts the Vite dev server; open the printed URL (default <http://localhost:5173>). The app opens on **Module A — Rocket** with a tab bar to switch between Modules A/B/C and **D · Landing**. Hot-module reload is on, so edits under `apps/web/src` refresh live.
+
+**Build the web app** (type-checks with `tsc` first, then bundles to `apps/web/dist`):
+
+```bash
+npm run build:web
+```
+
+**Run the tests:**
+
+```bash
+npm run test        # physics/sim suite (Node, packages/* + tests/)
+npm run test:web    # front-end component/smoke tests (Vitest + Testing Library)
+```
+
+Other root scripts: `npm run typecheck` (packages) and `npm run typecheck:web` (front-end). All scripts run from the repo root — the `*:web` variants forward to the `web` workspace, so you don't need to `cd apps/web`.
 
 ---
 
@@ -392,7 +429,86 @@ Real-time state trace, plus on-demand modal analysis readout (natural frequency,
 
 ---
 
-## 7. Tech Stack & Architecture
+## 7. Module D — Landing Simulator
+
+An interactive powered-descent simulator that lets you pick a reentry state and watch the rocket execute a suicide-burn landing in real time. It sits entirely in `apps/web/src/features/landing-sim/` and reuses the physics and guidance code from Module A (`packages/rocket-sim/src/guidance/landing.ts`).
+
+### 7.1 User Flow
+
+1. **Setup mode** — an SVG entry-point selector shows a speed (150–800 m/s) × altitude (6–25 km) plot. A background Web Worker streams a capture-region sweep into the plot as you interact: cells shade green (lands on pad), amber (misses pad), or red (crashes), so you can see at a glance which entry states are recoverable before committing to a run. Sliders below control flight-path angle γ (−88° to −35°) and horizontal downrange offset (0–8 km). The sweep re-runs (debounced 300 ms) whenever γ, downrange, or propellant load change — the grid axes are speed and altitude, so dragging the entry point never invalidates it.
+
+2. **Launch** — clicking Launch posts the chosen state to the worker, which runs the full descent headless in a fixed-timestep integrator and returns a complete telemetry recording (sampled every 2 simulation steps).
+
+3. **Flight mode** — the recording plays back on a 2D canvas with warp controls (1×/2×/5×/10×) and a scrub slider. A live telemetry dashboard updates every frame. The landing verdict is pre-computed from the finished run but revealed only when playback reaches touchdown, so the outcome unfolds in real time.
+
+### 7.2 Guidance Law
+
+The suicide-burn controller (`poweredDescentGuidance`) has three phases:
+
+| Phase | Trigger | What the controller does |
+|---|---|---|
+| **Coast** | Before ignition | Throttle 0; no gimbal authority. |
+| **Ignition** | `h ≤ v²/(2·a_max) · (1 + margin)` | Latched — engine never restars. Design deceleration `a_d = a_max / (1 + margin)` frozen at this moment. |
+| **Powered descent** | After ignition | Vertical: feedforward + PID tracks profile `v_cmd(h) = −√(v_td² + 2·a_d·h)`. Horizontal: position PIDs command a bounded nose tilt (≤ `maxTiltRad`), fed through the attitude controller to the gimbal. |
+
+The vertical feedforward is `throttle_ff = m·(g + a_d·clamp(ḣ/v_cmd, 0, 1.5)) / T_rated`, with a PID error term trimming the residual. All parameters (`ratedThrustN`, `ignitionMargin`, `touchdownSpeedMps`, `maxTiltRad`, PID gains) come from `config.control.descent` — nothing hardcoded.
+
+### 7.3 Canvas Visualization
+
+The canvas (`LandingCanvas`) renders at 760 × 520 px, redrawn every `requestAnimationFrame`:
+
+- **Sky** — linear blend from day blue at sea level to near-black at 20 km+ (altitude-driven).
+- **Ground & pad** — ground strip appears once it enters the camera window; landing pad drawn as a semicircular arc at north = 0.
+- **Rocket silhouette** — body + nose cone + fins at true pitch angle θ; landing legs deploy visually below 150 m AGL.
+- **Engine flame** — throttle-scaled triangle gradient at the tail, deterministic `sin(40·t)` flicker (replay-identical, no `Math.random()`).
+- **Touchdown visuals** — failure modes get distinct animations (RUD destroys the silhouette; others freeze in the crashed pose with verdict chip).
+
+Camera follows the vehicle: at high altitude it zooms out, zooming in as the rocket approaches the pad.
+
+### 7.4 Telemetry Dashboard
+
+A live HUD panel (`Dashboard`) reads from the current playback sample and shows:
+
+- **Phase label** — `FREEFALL` / `ENTRY BURN` / `LANDING BURN` / `TOUCHDOWN`, derived from the recorded phase transition timestamps.
+- **T− countdown** — exact (the recording is complete, so no extrapolation).
+- **12-field stat grid**: altitude (m AGL), vertical speed, horizontal speed, total speed, Mach, dynamic pressure q̄ (kPa), g-load, throttle %, propellant remaining %, pitch angle θ, gimbal δp, gimbal δy.
+
+### 7.5 Verdict System
+
+After a run, `classifyLanding` evaluates the finished telemetry with a priority-ordered ladder (first match wins):
+
+| Verdict | Condition |
+|---|---|
+| `rud` | Impact speed > `rudImpactSpeedMps` (default 25 m/s) |
+| `out-of-propellant` | Tanks dry **and** touchdown Vz still above limit |
+| `hard-landing` | Touchdown Vz > `touchdownVzMaxMps` (default 2 m/s) |
+| `tip-over` | Tilt from vertical at touchdown > `touchdownTiltMaxRad` (default 5°) |
+| `missed-pad` | Miss distance > `padRadiusM` (default 15 m) |
+| `success` | All limits met |
+
+All thresholds are config-driven (`config.control.landingTarget`). The verdict chip is revealed with a color-coded tone (green / amber / red) only when playback reaches touchdown.
+
+### 7.6 File Layout
+
+```
+apps/web/src/features/landing-sim/
+├── LandingSimView.tsx      # top-level: setup ↔ flight state machine, worker lifecycle
+├── EntryPointSelector.tsx  # SVG drag plot + γ/downrange sliders + capture grid
+├── LandingCanvas.tsx       # canvas renderer: sky, ground, pad, rocket, flame, verdict
+├── Dashboard.tsx           # live telemetry HUD + phase/countdown
+├── verdict.ts              # classifyLanding() pure function
+├── usePlayback.ts          # warp/scrub/play/pause/replay hook
+├── playbackMath.ts         # frame interpolation, derived quantities (Mach, q̄, g-load…)
+├── camera.ts               # world-to-screen projection, zoom-to-altitude logic
+└── types.ts                # EntryInputs, CaptureGrid, Verdict, PhaseLabel, PhaseTimes
+
+packages/rocket-sim/src/guidance/landing.ts   # poweredDescentGuidance() physics
+tests/unit/landing-guidance.test.ts           # unit tests: capture region, touchdown convergence
+```
+
+---
+
+## 8. Tech Stack & Architecture
 
 **Recommended primary stack: TypeScript end-to-end.**
 
@@ -431,7 +547,7 @@ export function modalAnalysis(A: Matrix4): ModeReport[]; // eigenvalues -> wn, z
 
 ---
 
-## 8. Data Schemas
+## 9. Data Schemas
 
 ### 8.1 Rocket Vehicle Config (`data/*.rocket.yaml`)
 
@@ -507,17 +623,18 @@ lateral_derivatives_nondim:
 
 ---
 
-## 9. UI / Visualization Spec
+## 10. UI / Visualization Spec
 
 - **Module A (Rocket):** 3D trajectory view (ascent arc + optional boostback/landing burn), live attitude/gimbal-deflection readout, telemetry strip charts (altitude, velocity, Mach, q̄, static margin), a "max-Q" and "max-g" marker overlay, and — critically — a landing-leg touchdown view (velocity vector, lateral offset, touchdown g) if descent mode is active.
 - **Module B (Reentry):** altitude-vs-velocity trajectory plot, heat-flux and g-load time histories with limit lines drawn in, ground-track map, and the signature **entry corridor chart** (`γ_entry` on Y, `V_entry` on X, shaded valid band between skip-out and burn-up curves, with the current run's entry point plotted as a marker — dragging it should let the user see in real time whether they're inside or outside the corridor).
 - **Module C (Aircraft):** attitude indicator (artificial horizon), virtual stick/rudder input widget (also bindable to keyboard/gamepad), scrolling strip charts for `α, β, p, q, r, φ, θ`, and the live modal-analysis readout (table of mode name, `ω_n`, `ζ`, `t_half`/`t_double`) plus one-click "doublet" excitation buttons per mode.
+- **Module D (Landing Sim):** drag-to-pick SVG entry-point selector with a streaming capture-region background grid (speed × altitude, shaded green/amber/red); γ and downrange sliders; 2D canvas flight view with warp (1×/2×/5×/10×) and scrub controls; live telemetry HUD (phase label, T− countdown, 12-field stat grid); and a color-coded verdict chip (success / hard-landing / tip-over / missed-pad / out-of-propellant / RUD) revealed at touchdown.
 
 Follow standard aerospace sign/color conventions throughout (nose-up positive pitch, right-wing-down positive roll, standard rate turn indicators) so the visuals read correctly to anyone with flight-sim or aero background.
 
 ---
 
-## 10. Validation & Test Suite
+## 11. Validation & Test Suite
 
 Every module must pass validation against a known analytical or textbook case before being considered "correct," independent of any visual polish:
 
@@ -535,10 +652,15 @@ Every module must pass validation against a known analytical or textbook case be
    - Eigenvalues of `A_lon`/`A_lat` for a textbook reference aircraft's published derivative set should reproduce that aircraft's documented short-period/phugoid/dutch-roll/spiral characteristics within a reasonable tolerance band.
    - Step response to a small elevator doublet should show a fast, well-damped short-period transient followed by a slow, lightly-damped phugoid — visually and numerically distinct timescales, confirming mode separation.
    - Symmetry check: identical positive/negative aileron doublets should produce mirror-image roll responses (confirms no sign-convention bugs in `B_lat`).
+5. **Module D (Landing Sim):**
+   - Touchdown vertical velocity must converge below `touchdownVzMaxMps` across the full green region of the capture-region grid (confirmed by `tests/unit/landing-guidance.test.ts`).
+   - Ignition trigger: for a zero-margin case (`ignitionMargin = 0`), the engine must ignite exactly when `h = v²/(2·a_max)`, and the vehicle must reach ground with near-zero residual velocity.
+   - Out-of-propellant verdict: a run with a minimal propellant load that cannot complete the burn must be classified `out-of-propellant`, not `hard-landing`.
+   - Capture-region sweep determinism: identical (γ, downrange, propellant) inputs must produce a bit-identical cell grid on every re-sweep (confirms no wall-clock or random-number dependencies in the physics loop).
 
 ---
 
-## 11. Build Roadmap
+## 12. Build Roadmap
 
 **Phase 0 — Foundations.** `physics-core` (vectors/quaternions/integrators) + `atmosphere-models`, fully unit-tested in isolation, no UI yet.
 
@@ -548,7 +670,7 @@ Every module must pass validation against a known analytical or textbook case be
 
 **Phase 3 — Rocket TVC control loop.** Add the PID gimbal controller and attitude-hold guidance mode; validate closed-loop step response against the linearized prediction.
 
-**Phase 4 — Rocket powered descent.** Suicide-burn guidance + landing-leg touchdown metrics; this is the "hero feature" and should get the most tuning/polish time.
+**Phase 4 — Landing Simulator. ✓ Complete.** Suicide-burn guidance (`poweredDescentGuidance`), interactive entry-point selector with streaming capture-region grid, canvas flight view with warp/scrub playback, live telemetry HUD, and a six-way verdict system. Physics validated and UI shipped in `apps/web`.
 
 **Phase 5 — Reentry module.** 3-DOF integration, heating model, then the corridor bisection search and corridor chart.
 
@@ -558,7 +680,7 @@ Every module must pass validation against a known analytical or textbook case be
 
 ---
 
-## 12. Symbol Glossary
+## 13. Symbol Glossary
 
 | Symbol | Meaning | Symbol | Meaning |
 |---|---|---|---|
@@ -575,7 +697,7 @@ Every module must pass validation against a known analytical or textbook case be
 
 ---
 
-## 13. References
+## 14. References
 
 - Etkin, B. & Reid, L. D., *Dynamics of Flight: Stability and Control* — the standard reference for the linearized aircraft equations in Section 6.
 - Sutton, G. & Biblarz, O., *Rocket Propulsion Elements* — thrust curve and Isp modeling.

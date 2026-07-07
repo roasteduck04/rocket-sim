@@ -6,7 +6,6 @@
  */
 
 import { useEffect, useMemo, useRef, useState, type JSX } from 'react';
-import { STATUS } from '../../lib/palette';
 import { referenceRocket } from '../../lib/data';
 import {
   createLandingSimWorker,
@@ -14,6 +13,7 @@ import {
   type LandingSimResponse,
 } from '../../lib/simWorker';
 import { Dashboard } from './Dashboard';
+import { MissionSpine } from './MissionSpine';
 import { EntryPointSelector, ENTRY_RANGES } from './EntryPointSelector';
 import { LandingCanvas, type TouchdownVisual } from './LandingCanvas';
 import { usePlayback } from './usePlayback';
@@ -42,13 +42,13 @@ const emptyGrid = (): CaptureGrid => ({
 });
 
 const VERDICT_TONE: Record<Verdict['kind'], string> = {
-  success: 'good',
-  'missed-pad': 'warning',
-  'no-touchdown': 'warning',
-  'hard-landing': 'critical',
-  'tip-over': 'critical',
-  'out-of-propellant': 'critical',
-  rud: 'critical',
+  success: 'is-good',
+  'missed-pad': 'is-warn',
+  'no-touchdown': 'is-warn',
+  'hard-landing': 'is-crit',
+  'tip-over': 'is-crit',
+  'out-of-propellant': 'is-crit',
+  rud: 'is-crit',
 };
 
 /** Flight-mode inner component so playback hooks mount only with a run. */
@@ -78,54 +78,62 @@ const Flight = ({
 
   return (
     <div className="landing-flight">
-      <div className="landing-canvas-wrap">
-        <LandingCanvas sample={pb.sample} touchdown={touchdown} />
-        {pb.done && (
-          <span className={`chip ${VERDICT_TONE[verdict.kind]} landing-verdict`}>
-            {verdict.kind === 'success' ? '✓ ' : '✗ '}
-            {verdict.detail}
-          </span>
-        )}
-        <div className="landing-controls" style={{ marginTop: 8 }}>
-          <button type="button" className="btn" onClick={pb.playing ? pb.pause : pb.play}>
-            {pb.playing ? '⏸' : '▶'}
-          </button>
-          {WARPS.map((w) => (
+      <div>
+        <div className="landing-canvas-wrap">
+          <LandingCanvas sample={pb.sample} touchdown={touchdown} />
+          {pb.done && (
+            <span className={`lc-verdict ${VERDICT_TONE[verdict.kind]}`}>
+              <span className="lc-verdict-glyph">{verdict.kind === 'success' ? '✓' : '✗'}</span>
+              {verdict.detail}
+            </span>
+          )}
+          <div className="landing-controls">
             <button
-              key={w}
               type="button"
-              className="btn"
-              aria-pressed={pb.warp === w}
-              style={pb.warp === w ? { borderColor: STATUS.good } : undefined}
-              onClick={() => pb.setWarp(w)}
+              className="lc-btn lc-btn--play"
+              onClick={pb.playing ? pb.pause : pb.play}
+              aria-label={pb.playing ? 'Pause' : 'Play'}
             >
-              {w}×
+              {pb.playing ? '⏸' : '▶'}
             </button>
-          ))}
-          <input
-            type="range"
-            min={0}
-            max={pb.duration}
-            step={0.1}
-            value={pb.tSim}
-            aria-label="Scrub playback"
-            onChange={(e) => pb.seek(Number(e.target.value))}
-          />
-          <button type="button" className="btn" onClick={pb.replay}>
-            Replay
-          </button>
-          <button type="button" className="btn" onClick={onReset}>
-            ◀ New entry
-          </button>
+            {WARPS.map((w) => (
+              <button
+                key={w}
+                type="button"
+                className={`lc-btn${pb.warp === w ? ' is-active' : ''}`}
+                aria-pressed={pb.warp === w}
+                onClick={() => pb.setWarp(w)}
+              >
+                {w}×
+              </button>
+            ))}
+            <input
+              type="range"
+              className="lc-scrub"
+              min={0}
+              max={pb.duration}
+              step={0.1}
+              value={pb.tSim}
+              aria-label="Scrub playback"
+              onChange={(e) => pb.seek(Number(e.target.value))}
+            />
+            <button type="button" className="lc-btn" onClick={pb.replay}>
+              Replay
+            </button>
+            <button type="button" className="lc-btn" onClick={onReset}>
+              ◀ New entry
+            </button>
+          </div>
         </div>
       </div>
-      <Dashboard
-        sample={pb.sample}
-        times={run}
-        duration={pb.duration}
-        propellantKg0={inputs.propellantKg}
-        dryKg={cfg.mass.dryKg}
-      />
+      <div className="lc-rail">
+        <MissionSpine t={pb.sample.t} times={run} duration={pb.duration} />
+        <Dashboard
+          sample={pb.sample}
+          propellantKg0={inputs.propellantKg}
+          dryKg={cfg.mass.dryKg}
+        />
+      </div>
     </div>
   );
 };
@@ -227,7 +235,7 @@ export const LandingSimView = (): JSX.Element => {
         onLaunch={launch}
         disabled={awaitingRun}
       />
-      {awaitingRun && <p className="hint">running the descent…</p>}
+      {awaitingRun && <p className="lc-status">running the descent…</p>}
       {error && <p className="error-note">{error}</p>}
     </div>
   );
