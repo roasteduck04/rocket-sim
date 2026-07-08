@@ -10,6 +10,8 @@ Orientation for AI coding agents working in this repo. Keep it short; update it 
 
 `README.md` is the authoritative spec (physics, equations, schemas, build order). Read the relevant section before changing a module. Modules A–C map to Sections 4–6; Module D to Section 7.
 
+**Final-product upgrade in progress:** `finalproductroadmap.md` is the durable anchor for phases 8–14. Its **§3.1 Live status** tracks the active phase and per-stage progress across sessions — read it (plus the active phase's spec/plan in `docs/superpowers/`) to re-anchor.
+
 ## Layout
 
 ```

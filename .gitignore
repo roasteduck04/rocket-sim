@@ -4,3 +4,6 @@ coverage/
 *.tsbuildinfo
 .DS_Store
 .vitest/
+
+# Local-only OpenRocket reference collection (~583 MB); see finalproductroadmap.md §1.
+OpenRocket/
