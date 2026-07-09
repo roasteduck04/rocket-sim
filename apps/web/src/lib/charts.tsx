@@ -74,14 +74,14 @@ export const TimeChart = ({
           domain={['dataMin', 'dataMax']}
           stroke={chartTheme.axis}
           tickLine={false}
-          tick={{ fill: chartTheme.muted, fontSize: 11 }}
+          tick={chartTheme.tick}
           label={{ value: xLabel, position: 'insideBottomRight', fill: chartTheme.muted, fontSize: 11, dy: 8 }}
           height={30}
         />
         <YAxis
           stroke={chartTheme.axis}
           tickLine={false}
-          tick={{ fill: chartTheme.muted, fontSize: 11 }}
+          tick={chartTheme.tick}
           width={54}
           domain={yDomain ?? ['auto', 'auto']}
           tickFormatter={(v: number) => `${Number(v.toPrecision(4))}`}

@@ -25,7 +25,9 @@
   align-items: baseline;
   justify-content: space-between;
   gap: var(--fd-space-3);
+  padding-bottom: var(--fd-space-2);
   margin-bottom: var(--fd-space-3);
+  border-bottom: 1px solid var(--fd-hairline);
 }
 
 .fd-panel__title {
@@ -128,6 +130,7 @@
     background-color var(--fd-dur-fast) var(--fd-ease-standard),
     border-color var(--fd-dur-fast) var(--fd-ease-standard),
     color var(--fd-dur-fast) var(--fd-ease-standard),
+    transform var(--fd-dur-fast) var(--fd-ease-standard),
     opacity var(--fd-dur-fast) var(--fd-ease-standard);
 }
 
@@ -166,6 +169,10 @@
 }
 .fd-btn--danger:hover:not(:disabled) {
   background: color-mix(in srgb, var(--fd-critical) 14%, transparent);
+}
+
+.fd-btn:active:not(:disabled) {
+  transform: translateY(1px);
 }
 
 .fd-btn:disabled {

@@ -50,3 +50,9 @@ body {
 :focus:not(:focus-visible) {
   outline: none;
 }
+
+/* On-brand text selection — the accent, not the browser's default blue. */
+::selection {
+  background: var(--fd-accent-border);
+  color: var(--fd-ink);
+}

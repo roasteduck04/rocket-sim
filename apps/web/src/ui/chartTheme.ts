@@ -9,7 +9,7 @@
  * and `STATUS` from this module, so there is one categorical source.
  */
 
-import { COLOR, CHART, SERIES as SLOT, SERIES_ORDER, STATUS as STATUS_TOKENS } from './tokens';
+import { COLOR, CHART, FONT, SERIES as SLOT, SERIES_ORDER, STATUS as STATUS_TOKENS } from './tokens';
 
 /** Structured styling for Recharts axes/grid/tooltip/legend + custom SVG. */
 export const chartTheme = {
@@ -19,13 +19,16 @@ export const chartTheme = {
   ink: COLOR.ink,
   ink2: COLOR.ink2,
   muted: COLOR.muted,
-  tick: { fill: COLOR.muted, fontSize: 11 },
+  /* Axis numerals wear the mono family + tabular figures, like every other
+     number in the app (telemetry, stat tiles, readouts). */
+  tick: { fill: COLOR.muted, fontSize: 11, fontFamily: FONT.mono },
   tooltip: {
     background: COLOR.elevated,
     border: `1px solid ${COLOR.border}`,
     borderRadius: 8,
     color: COLOR.ink2,
     fontSize: 12,
+    boxShadow: '0 6px 16px -6px rgba(0, 0, 0, 0.5)',
   },
   legend: { fontSize: 11, color: COLOR.ink2 },
 } as const;

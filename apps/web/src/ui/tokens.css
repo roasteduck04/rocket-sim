@@ -141,10 +141,11 @@
   --fd-radius-lg: 12px;
   --fd-radius-pill: 999px;
 
-  /* ---- Elevation (soft shadows on graphite) ------------------------------ */
-  --fd-elev-1: 0 1px 2px rgba(0, 0, 0, 0.4);
-  --fd-elev-2: 0 4px 12px rgba(0, 0, 0, 0.45);
-  --fd-elev-3: 0 12px 32px rgba(0, 0, 0, 0.5);
+  /* ---- Elevation (soft, directional shadows on graphite) ----------------- */
+  /* Negative spread keeps the penumbra tight so panels read crisp, not muddy. */
+  --fd-elev-1: 0 1px 2px rgba(0, 0, 0, 0.35);
+  --fd-elev-2: 0 6px 16px -6px rgba(0, 0, 0, 0.5);
+  --fd-elev-3: 0 18px 40px -12px rgba(0, 0, 0, 0.6);
 
   /* ---- Motion (quiet, fast; transform/opacity only) ---------------------- */
   --fd-dur-fast: 120ms;
