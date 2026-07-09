@@ -36,7 +36,7 @@ Each phase runs its own brainstorm → spec → plan → execute cycle.
 
 | # | Phase | Size | Depends on | Status | Key references |
 |---|---|---|---|---|---|
-| 8 | Design language & IA | M | — | 🔨 in progress | frontend-design + dataviz skills at exec time |
+| 8 | Design language & IA | M | — | ✅ done | frontend-design + dataviz skills at exec time |
 | 9 | Rocket design studio | XL (9a–9d) | 8 | ⬜ not started | OpenRocket techdoc; local `OpenRocket/` MDs |
 | 10 | Monte Carlo & dispersion | L | 9 | ⬜ not started | RocketPy MC docs; `OR Monte Carlo.md` |
 | 11 | Airbrakes (active control) | M | 9 | ⬜ not started | ORBrake, or-airbrake-plugin |
@@ -52,10 +52,12 @@ below — the single source of truth for cross-session progress (no separate pro
 
 ### 3.1 Live status
 
-**Active phase: 8 — Design language & IA.**
-Spec: `docs/superpowers/specs/2026-07-08-phase-8-design-language-design.md` ·
+**Phase 8 complete (2026-07-09). Next active phase: 9 — Rocket design studio** (not yet started).
+When starting Phase 9, replace this block with its spec/plan/branch pointers.
+
+Phase 8 reference — Spec: `docs/superpowers/specs/2026-07-08-phase-8-design-language-design.md` ·
 Plan: `docs/superpowers/plans/2026-07-08-phase-8-design-language.md` ·
-Branch: `phase-8-design-language`.
+Design system: `docs/design-system.md` · Branch: `phase-8-design-language`.
 
 - [x] Stage 0 — Spec + plan committed; roadmap Status tracking stood up
 - [x] Stage 1 — Fonts (Inter + JetBrains Mono) + typed token layer (`ui/tokens.ts`/`.css`, `base.css`)
@@ -65,9 +67,14 @@ Branch: `phase-8-design-language`.
 - [x] Stage 5 — Nav shell (left sidebar `AppShell/Sidebar/Header/nav.ts`)
 - [x] Stage 6 — Refit A/B/C onto tokens + primitives
 - [x] Stage 7 — Re-skin D + Overview onto the unified language
-- [ ] Stage 8 — Design-system doc + finalize; flip Phase 8 → ✅
+- [x] Stage 8 — Design-system doc + finalize; flip Phase 8 → ✅
 
 **Progress log** (newest first):
+- 2026-07-09 — Stage 8 done → **Phase 8 complete.** Wrote `docs/design-system.md` (tokens,
+  component inventory + usage, chart/nav notes, do/don't). Full verification green: packages `test`
+  (331, physics untouched), `test:web` (58), `build:web`. Flipped Phase 8 Status → ✅. Every A–D +
+  Overview view now renders on the unified "Precision Instrument" system; charts themed from tokens;
+  sidebar shell in place with Phase 9+ placeholders. Branch `phase-8-design-language` (8 commits).
 - 2026-07-09 — Stage 7 done. Converged Module D + Overview: re-pointed `--l-*`/`--ov-*` (styles.css)
   and the `LANDING`/`OVERVIEW` JS mirrors (palette.ts) to the `--fd-*`/token layer — the ignition
   amber and blueprint palettes are retired; D's accent is now the shared cyan-teal. Also re-pointed
