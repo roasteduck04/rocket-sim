@@ -6,22 +6,27 @@
  */
 
 :root {
-  --page: #0d0d0d;
-  --surface: #1a1a19;
-  --ink: #ffffff;
-  --ink-2: #c3c2b7;
-  --muted: #898781;
-  --grid: #2c2c2a;
-  --axis: #383835;
-  --border: rgba(255, 255, 255, 0.1);
-  --series-1: #3987e5; /* blue */
-  --series-2: #199e70; /* aqua */
-  --series-3: #c98500; /* yellow */
-  --series-6: #e66767; /* red */
-  --good: #0ca30c;
-  --warning: #fab219;
-  --serious: #ec835a;
-  --critical: #d03b3b;
+  /* Phase 8 Stage 6: the shared A/B/C chrome tokens now alias the Precision
+     Instrument layer (ui/tokens.css), so the legacy .panel/.stat/.chip/.btn/
+     .field classes render on the unified graphite + cyan-teal system without
+     touching component markup. --l-*/--ov-* (Module D + Overview) are converged
+     separately in Stage 7. */
+  --page: var(--fd-bg);
+  --surface: var(--fd-surface);
+  --ink: var(--fd-ink);
+  --ink-2: var(--fd-ink-2);
+  --muted: var(--fd-muted);
+  --grid: var(--fd-grid);
+  --axis: var(--fd-border);
+  --border: var(--fd-hairline);
+  --series-1: var(--fd-series-1); /* blue */
+  --series-2: var(--fd-series-2); /* aqua → green */
+  --series-3: var(--fd-series-3); /* yellow → orange */
+  --series-6: var(--fd-series-5); /* red → pink */
+  --good: var(--fd-good);
+  --warning: var(--fd-warning);
+  --serious: var(--fd-serious);
+  --critical: var(--fd-critical);
 
   /* D · Landing console identity — cooler/darker instrument base + ignition
      amber accent. Scoped to the landing-sim; mirrors LANDING in lib/palette.ts.
@@ -122,13 +127,13 @@
 
 .field input[type='range'] {
   width: 9rem;
-  accent-color: var(--series-1);
+  accent-color: var(--fd-accent);
 }
 
 .btn {
   display: inline-block;
-  background: var(--series-1);
-  color: #fff;
+  background: var(--fd-accent);
+  color: var(--fd-accent-ink);
   border: none;
   border-radius: 8px;
   padding: 0.5rem 1.1rem;

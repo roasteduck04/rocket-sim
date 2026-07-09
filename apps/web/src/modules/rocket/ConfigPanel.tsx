@@ -3,9 +3,14 @@
  * numbers the worker feeds to the validated §8.1 reference booster. Physics
  * parameters (PID gains, thrust curve, aero table) stay in the YAML config —
  * this panel only shapes the run.
+ *
+ * Phase 8 Stage 6: refit onto the Precision Instrument primitives (Panel,
+ * NumberField with SI units + drag-to-scrub, Select, Button). Behavior is
+ * unchanged — same fields, ranges, and run wiring.
  */
 
 import type { JSX } from 'react';
+import { Panel, NumberField, Select, Button } from '../../ui';
 
 export type RocketMode = 'ascent' | 'landing';
 
@@ -21,37 +26,6 @@ export interface LandingParams {
   vEastMps: number;
   propellantKg: number;
 }
-
-const Num = ({
-  label,
-  value,
-  onChange,
-  step = 1,
-  min,
-  max,
-}: {
-  label: string;
-  value: number;
-  onChange: (v: number) => void;
-  step?: number;
-  min?: number;
-  max?: number;
-}): JSX.Element => (
-  <div className="field">
-    <label>{label}</label>
-    <input
-      type="number"
-      value={value}
-      step={step}
-      min={min}
-      max={max}
-      onChange={(e) => {
-        const v = Number(e.target.value);
-        if (Number.isFinite(v)) onChange(v);
-      }}
-    />
-  </div>
-);
 
 export const ConfigPanel = ({
   mode,
@@ -72,19 +46,21 @@ export const ConfigPanel = ({
   onRun: () => void;
   busy: boolean;
 }): JSX.Element => (
-  <div className="panel">
-    <h2>Scenario — Reference TVC Booster</h2>
-    <div className="field">
-      <label>Flight phase</label>
-      <select value={mode} onChange={(e) => onMode(e.target.value as RocketMode)}>
-        <option value="ascent">Open-loop ascent</option>
-        <option value="landing">Powered-descent landing</option>
-      </select>
-    </div>
+  <Panel title="Scenario — Reference TVC Booster">
+    <Select
+      label="Flight phase"
+      value={mode}
+      onChange={(m) => onMode(m as RocketMode)}
+      options={[
+        { value: 'ascent', label: 'Open-loop ascent' },
+        { value: 'landing', label: 'Powered-descent landing' },
+      ]}
+    />
     {mode === 'ascent' ? (
       <>
-        <Num
-          label="Run time (s)"
+        <NumberField
+          label="Run time"
+          unit="s"
           value={ascent.maxTime}
           onChange={(maxTime) => onAscent({ maxTime })}
           min={1}
@@ -98,34 +74,39 @@ export const ConfigPanel = ({
       </>
     ) : (
       <>
-        <Num
-          label="Start altitude (m)"
+        <NumberField
+          label="Start altitude"
+          unit="m"
           value={landing.altitudeM}
           onChange={(v) => onLanding({ ...landing, altitudeM: v })}
           step={100}
           min={200}
         />
-        <Num
-          label="Descent rate (m/s)"
+        <NumberField
+          label="Descent rate"
+          unit="m/s"
           value={landing.descentRateMps}
           onChange={(v) => onLanding({ ...landing, descentRateMps: v })}
           step={5}
           min={0}
         />
-        <Num
-          label="East offset (m)"
+        <NumberField
+          label="East offset"
+          unit="m"
           value={landing.eastOffsetM}
           onChange={(v) => onLanding({ ...landing, eastOffsetM: v })}
           step={10}
         />
-        <Num
-          label="East velocity (m/s)"
+        <NumberField
+          label="East velocity"
+          unit="m/s"
           value={landing.vEastMps}
           onChange={(v) => onLanding({ ...landing, vEastMps: v })}
           step={1}
         />
-        <Num
-          label="Propellant (kg)"
+        <NumberField
+          label="Propellant"
+          unit="kg"
           value={landing.propellantKg}
           onChange={(v) => onLanding({ ...landing, propellantKg: v })}
           step={50}
@@ -138,9 +119,9 @@ export const ConfigPanel = ({
       </>
     )}
     <div className="btn-row">
-      <button type="button" className="btn" onClick={onRun} disabled={busy}>
+      <Button onClick={onRun} busy={busy}>
         {busy ? 'Running…' : 'Run simulation'}
-      </button>
+      </Button>
     </div>
-  </div>
+  </Panel>
 );

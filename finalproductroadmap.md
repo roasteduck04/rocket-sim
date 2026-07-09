@@ -63,11 +63,17 @@ Branch: `phase-8-design-language`.
 - [x] Stage 3 — Form/editor primitives (`Field/NumberField/Select/Slider/TextField/Tree/Tabs/Toolbar/Modal`) + tests
 - [x] Stage 4 — Chart theme (`ui/chartTheme.ts`); refit charts; fold in `palette.ts`
 - [x] Stage 5 — Nav shell (left sidebar `AppShell/Sidebar/Header/nav.ts`)
-- [ ] Stage 6 — Refit A/B/C onto tokens + primitives
+- [x] Stage 6 — Refit A/B/C onto tokens + primitives
 - [ ] Stage 7 — Re-skin D + Overview onto the unified language
 - [ ] Stage 8 — Design-system doc + finalize; flip Phase 8 → ✅
 
 **Progress log** (newest first):
+- 2026-07-09 — Stage 6 done. Re-pointed the shared A/B/C chrome tokens (`--page/--surface/--ink/
+  --series-*/--good…` in styles.css) to alias the `--fd-*` layer, so the legacy `.panel/.stat/.chip/
+  .btn/.field` classes render on the unified graphite + cyan-teal system with no markup churn;
+  legacy `.btn`/range accents now use `--fd-accent`. Migrated `modules/rocket/ConfigPanel.tsx` to the
+  primitives (Panel, NumberField w/ SI units + scrub, Select, Button) as the representative swap —
+  behavior unchanged. `--l-*`/`--ov-*` still bespoke (Stage 7). `build:web` + `test:web` (58) green.
 - 2026-07-09 — Stage 5 done. Added the sidebar nav shell: `shell/nav.ts` (data-driven `NAV_GROUPS`
   — Simulators / Studio / Analysis / Learn, Phase 9+ as disabled placeholders), `shell/Sidebar`
   (grouped, collapsible, active highlight), `shell/Header` (title + collapse toggle + reserved
