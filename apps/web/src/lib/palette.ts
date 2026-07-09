@@ -1,55 +1,59 @@
 /**
- * Legacy color shim (Phase 8 Stage 4). The categorical + status colors are now
- * owned by `ui/tokens.ts` and re-exported here via `ui/chartTheme.ts`, so there
- * is a single source. The neutral chrome constants below stay as literals for
- * the not-yet-migrated SVG/3D widgets (attitude indicator, stick, trajectory
- * scene, envelope map); Stage 6/7 re-points those onto `ui/tokens.ts` and
- * removes this file. `LANDING`/`OVERVIEW` are Module D + Overview identities,
- * retired when those views converge in Stage 7.
+ * Legacy color shim (Phase 8). Every value now derives from `ui/tokens.ts` —
+ * this file only preserves the old export names so the remaining SVG/canvas/3D
+ * widgets keep compiling. The bespoke dark-cockpit, ignition-amber, and
+ * blueprint palettes are retired: Module D's amber and the Overview blueprint
+ * both converge onto the shared cyan-teal accent + graphite surfaces.
+ *
+ * New code should import from `ui/tokens.ts` (typed) or `ui/chartTheme.ts`
+ * directly; this shim is expected to disappear as the widgets migrate.
  */
 
-// Categorical (fixed order, per-entity) + status — folded into the token layer.
+import { COLOR, CHART } from '../ui/tokens';
+
+// Categorical (fixed order, per-entity) + status — owned by the token layer.
 export { SERIES, STATUS } from '../ui/chartTheme';
 
-// Neutral chrome — original dark-cockpit hexes, retained for the SVG/3D widgets
-// that still import from here until their Stage 6/7 refit.
-export const SURFACE = '#1a1a19';
-export const PAGE = '#0d0d0d';
-export const INK = '#ffffff';
-export const INK_2 = '#c3c2b7';
-export const MUTED = '#898781';
-export const GRID = '#2c2c2a';
-export const AXIS = '#383835';
+// Neutral chrome — now token-derived (graphite + slate).
+export const SURFACE = COLOR.surface;
+export const PAGE = COLOR.bg;
+export const INK = COLOR.ink;
+export const INK_2 = COLOR.ink2;
+export const MUTED = COLOR.muted;
+// Grid/axis for the SVG/3D instrument widgets: visible graphite lines (the
+// recessive chart-grid rgba lives in ui/chartTheme.ts / CHART instead).
+export const GRID = COLOR.border;
+export const AXIS = COLOR.borderStrong;
+
+/** Recessive chart gridlines (re-exported for parity with the token layer). */
+export const CHART_GRID = CHART.grid;
 
 /**
- * D · Landing console identity (mirrors the `--l-*` custom properties in
- * styles.css). Retired in Stage 7 when Module D converges onto the unified
- * tokens.
+ * D · Landing console identity — converged onto the unified tokens. The former
+ * ignition-amber accent is now the shared cyan-teal; `ground`/`sky` remain
+ * literal because they are scene content (the canvas world), not chrome.
  */
 export const LANDING = {
-  void: '#07080b',
-  panel: '#0f1117',
-  panel2: '#141821',
-  ink: '#e8ecf2',
-  ink2: '#9aa4b2',
-  muted: '#5f6875',
-  amber: '#f5b52e',
-  /** Deep slate for the ground plane in the canvas. */
+  void: COLOR.bg,
+  panel: COLOR.surface,
+  panel2: COLOR.surface2,
+  ink: COLOR.ink,
+  ink2: COLOR.ink2,
+  muted: COLOR.muted,
+  amber: COLOR.accent,
+  /** Deep slate for the ground plane in the canvas (scene content). */
   ground: '#12151c',
-  /** Day-blue sky at the deck (blends to `void` at altitude). */
+  /** Day-blue sky at the deck, blending to the void at altitude (scene). */
   sky: '#6f9fce',
 } as const;
 
-/**
- * Suite Overview front door (mirrors the `--ov-*` custom properties in
- * styles.css). Retired in Stage 7 when the Overview converges.
- */
+/** Suite Overview front door — converged onto the unified tokens. */
 export const OVERVIEW = {
-  void: '#06070a',
-  panel: '#0d0f15',
-  line: 'rgba(150, 180, 210, 0.10)',
-  line2: 'rgba(150, 180, 210, 0.20)',
-  ink: '#e9edf3',
-  ink2: '#97a1b0',
-  muted: '#59616e',
+  void: COLOR.bg,
+  panel: COLOR.surface,
+  line: COLOR.hairline,
+  line2: COLOR.border,
+  ink: COLOR.ink,
+  ink2: COLOR.ink2,
+  muted: COLOR.muted,
 } as const;

@@ -64,10 +64,17 @@ Branch: `phase-8-design-language`.
 - [x] Stage 4 — Chart theme (`ui/chartTheme.ts`); refit charts; fold in `palette.ts`
 - [x] Stage 5 — Nav shell (left sidebar `AppShell/Sidebar/Header/nav.ts`)
 - [x] Stage 6 — Refit A/B/C onto tokens + primitives
-- [ ] Stage 7 — Re-skin D + Overview onto the unified language
+- [x] Stage 7 — Re-skin D + Overview onto the unified language
 - [ ] Stage 8 — Design-system doc + finalize; flip Phase 8 → ✅
 
 **Progress log** (newest first):
+- 2026-07-09 — Stage 7 done. Converged Module D + Overview: re-pointed `--l-*`/`--ov-*` (styles.css)
+  and the `LANDING`/`OVERVIEW` JS mirrors (palette.ts) to the `--fd-*`/token layer — the ignition
+  amber and blueprint palettes are retired; D's accent is now the shared cyan-teal. Also re-pointed
+  the remaining SVG/3D neutral constants in palette.ts to tokens. Swapped the three inline
+  Saira/Space Mono font strings (EnvelopeMap, EntryPointSelector, LandingCanvas) to `FONT.sans`/
+  `FONT.mono`, removed the `@fontsource` Saira/Space Mono imports from main.tsx, and uninstalled
+  both packages. No Saira/Space Mono assets in the build. `build:web` + `test:web` (58) green.
 - 2026-07-09 — Stage 6 done. Re-pointed the shared A/B/C chrome tokens (`--page/--surface/--ink/
   --series-*/--good…` in styles.css) to alias the `--fd-*` layer, so the legacy `.panel/.stat/.chip/
   .btn/.field` classes render on the unified graphite + cyan-teal system with no markup churn;

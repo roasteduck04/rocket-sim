@@ -10,6 +10,7 @@
 
 import { useRef, type JSX, type PointerEvent } from 'react';
 import { LANDING, STATUS } from '../../lib/palette';
+import { FONT } from '../../ui/tokens';
 import { degToRad, fmtDeg, fmtKm } from '../../lib/unitsDisplay';
 import type { CaptureGrid, CaptureOutcome, EntryInputs } from './types';
 
@@ -27,7 +28,7 @@ const H = 300;
 const M = { l: 52, r: 14, t: 14, b: 40 }; // plot margins
 const PW = W - M.l - M.r;
 const PH = H - M.t - M.b;
-const MONO = "'Space Mono', ui-monospace, monospace";
+const MONO = FONT.mono;
 
 const CELL_FILL: Record<CaptureOutcome, string> = {
   lands: STATUS.good,

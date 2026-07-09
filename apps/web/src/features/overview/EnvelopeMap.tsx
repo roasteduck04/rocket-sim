@@ -10,10 +10,12 @@
 
 import { type JSX, type KeyboardEvent } from 'react';
 import { OVERVIEW } from '../../lib/palette';
+import { FONT } from '../../ui/tokens';
 import { MODULES, type LaunchId } from './modules';
 
-const DISPLAY = "'Saira Condensed', 'Saira', system-ui, sans-serif";
-const MONO = "'Space Mono', ui-monospace, monospace";
+// Phase 8 Stage 7: unified type — Inter for signage, JetBrains Mono numerics.
+const DISPLAY = FONT.sans;
+const MONO = FONT.mono;
 
 const W = 580;
 const H = 400;

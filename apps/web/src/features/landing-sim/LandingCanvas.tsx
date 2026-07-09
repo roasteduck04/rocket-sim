@@ -8,6 +8,7 @@
 
 import { useEffect, useRef, type JSX } from 'react';
 import { INK_2, LANDING, MUTED, STATUS } from '../../lib/palette';
+import { FONT } from '../../ui/tokens';
 import { cameraFor, worldToScreen } from './camera';
 import type { PlaybackSample } from './playbackMath';
 import type { Verdict } from './types';
@@ -184,7 +185,7 @@ export const drawScene = (
         ctx.stroke();
         ctx.setLineDash([]);
         ctx.fillStyle = STATUS.warning;
-        ctx.font = "12px 'Space Mono', ui-monospace, monospace";
+        ctx.font = `12px ${FONT.mono}`;
         ctx.fillText(
           `${Math.abs(sample.northM).toFixed(0)} m`,
           (pad.x + site.x) / 2 + 6,
