@@ -1,6 +1,8 @@
 /**
- * @fds/rocket-design — the parametric rocket design studio core. Generates the
- * mass properties, Barrowman aero table, and thrust curve that @fds/rocket-sim
- * consumes, so the 6-DOF core stays untouched (Phase 9, finalproductroadmap).
+ * @fds/rocket-design — parametric rocket design studio core (Phase 9).
+ * Generates @fds/rocket-sim inputs; the 6-DOF core stays untouched.
  */
+export * from './materials.js';
+export * from './components.js';
+
 export const PACKAGE = '@fds/rocket-design';
