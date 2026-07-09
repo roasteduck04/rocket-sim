@@ -10,7 +10,7 @@
  */
 
 import { useRef, type JSX, type PointerEvent as ReactPointerEvent } from 'react';
-import { AXIS, GRID, INK, MUTED, SERIES, STATUS } from '../../lib/palette';
+import { AXIS, GRID, INK, MUTED, SERIES, STATUS } from '../../ui/chartTheme';
 import { radToDeg } from '../../lib/unitsDisplay';
 
 export interface CorridorPointData {

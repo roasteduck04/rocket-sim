@@ -6,7 +6,7 @@
 
 import { useMemo, type JSX } from 'react';
 import type { ReentryFrame } from '@fds/reentry-sim';
-import { AXIS, GRID, INK, MUTED, SERIES, STATUS } from '../../lib/palette';
+import { AXIS, GRID, INK, MUTED, SERIES, STATUS } from '../../ui/chartTheme';
 import { fmtKm, radToDeg } from '../../lib/unitsDisplay';
 import type { TrajectoryClass } from '../../lib/simWorker';
 

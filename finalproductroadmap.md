@@ -61,13 +61,19 @@ Branch: `phase-8-design-language`.
 - [x] Stage 1 — Fonts (Inter + JetBrains Mono) + typed token layer (`ui/tokens.ts`/`.css`, `base.css`)
 - [x] Stage 2 — Chrome primitives (`Panel/Stat/Chip/Button`) + tests
 - [x] Stage 3 — Form/editor primitives (`Field/NumberField/Select/Slider/TextField/Tree/Tabs/Toolbar/Modal`) + tests
-- [ ] Stage 4 — Chart theme (`ui/chartTheme.ts`); refit charts; fold in `palette.ts`
+- [x] Stage 4 — Chart theme (`ui/chartTheme.ts`); refit charts; fold in `palette.ts`
 - [ ] Stage 5 — Nav shell (left sidebar `AppShell/Sidebar/Header/nav.ts`)
 - [ ] Stage 6 — Refit A/B/C onto tokens + primitives
 - [ ] Stage 7 — Re-skin D + Overview onto the unified language
 - [ ] Stage 8 — Design-system doc + finalize; flip Phase 8 → ✅
 
 **Progress log** (newest first):
+- 2026-07-09 — Stage 4 done. Added `ui/chartTheme.ts` (token-derived axis/grid/tooltip/legend +
+  categorical `SERIES`/`STATUS`); refit `lib/charts.tsx` (TimeChart) and the five bespoke charts
+  (Corridor/Strip/AltVel/HeatGLoad/GroundTrack) to consume it. Folded `SERIES`/`STATUS` into the
+  token layer — `lib/palette.ts` is now a shim re-exporting them (neutrals kept literal for the
+  not-yet-migrated SVG/3D widgets; `LANDING`/`OVERVIEW` retired in Stage 7). Charts now render on the
+  brand palette. `build:web` + `test:web` (58) + packages `test` (331, physics untouched) all green.
 - 2026-07-09 — Stage 3 done. Added the studio form/editor primitives: `Field` (label/control/
   hint/error skeleton + a11y wiring), `NumberField` (SI unit, drag-to-scrub, clamp/snap, keyboard
   ↑/↓ ×10), `TextField`, `Select`, `Slider` (native-backed for free a11y), `Tabs` (roving focus),

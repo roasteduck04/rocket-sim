@@ -7,7 +7,7 @@
 import { useMemo, type JSX } from 'react';
 import type { ReentryFrame, ReentryLimits } from '@fds/reentry-sim';
 import { TimeChart, type ChartRow } from '../../lib/charts';
-import { SERIES, STATUS } from '../../lib/palette';
+import { SERIES, STATUS } from '../../ui/chartTheme';
 
 const MAX_ROWS = 600;
 

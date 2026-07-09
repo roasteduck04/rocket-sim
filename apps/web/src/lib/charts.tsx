@@ -17,7 +17,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-import { AXIS, GRID, INK_2, MUTED, SURFACE } from './palette';
+import { chartTheme } from '../ui/chartTheme';
 
 export interface SeriesSpec {
   /** Row property to plot. */
@@ -36,13 +36,7 @@ export interface RefLineSpec {
 
 export type ChartRow = Record<string, number>;
 
-const TOOLTIP_STYLE = {
-  background: SURFACE,
-  border: `1px solid ${AXIS}`,
-  borderRadius: 8,
-  color: INK_2,
-  fontSize: 12,
-} as const;
+const TOOLTIP_STYLE = chartTheme.tooltip;
 
 export const TimeChart = ({
   title,
@@ -69,25 +63,25 @@ export const TimeChart = ({
   <div className="chart-card panel">
     <h3>
       {title}
-      {unit ? <span style={{ color: MUTED }}> · {unit}</span> : null}
+      {unit ? <span style={{ color: chartTheme.muted }}> · {unit}</span> : null}
     </h3>
     <ResponsiveContainer width="100%" height={height}>
       <LineChart data={data} margin={{ top: 8, right: 14, bottom: 2, left: 0 }}>
-        <CartesianGrid stroke={GRID} vertical={false} />
+        <CartesianGrid stroke={chartTheme.grid} vertical={false} />
         <XAxis
           dataKey={xKey}
           type="number"
           domain={['dataMin', 'dataMax']}
-          stroke={AXIS}
+          stroke={chartTheme.axis}
           tickLine={false}
-          tick={{ fill: MUTED, fontSize: 11 }}
-          label={{ value: xLabel, position: 'insideBottomRight', fill: MUTED, fontSize: 11, dy: 8 }}
+          tick={{ fill: chartTheme.muted, fontSize: 11 }}
+          label={{ value: xLabel, position: 'insideBottomRight', fill: chartTheme.muted, fontSize: 11, dy: 8 }}
           height={30}
         />
         <YAxis
-          stroke={AXIS}
+          stroke={chartTheme.axis}
           tickLine={false}
-          tick={{ fill: MUTED, fontSize: 11 }}
+          tick={{ fill: chartTheme.muted, fontSize: 11 }}
           width={54}
           domain={yDomain ?? ['auto', 'auto']}
           tickFormatter={(v: number) => `${Number(v.toPrecision(4))}`}
@@ -99,7 +93,7 @@ export const TimeChart = ({
           isAnimationActive={false}
         />
         {series.length > 1 && (
-          <Legend wrapperStyle={{ fontSize: 11, color: INK_2 }} iconType="plainline" />
+          <Legend wrapperStyle={{ fontSize: 11, color: chartTheme.ink2 }} iconType="plainline" />
         )}
         {refLines.map((rl) => (
           <ReferenceLine

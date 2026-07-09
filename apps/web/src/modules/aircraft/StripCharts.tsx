@@ -7,7 +7,7 @@
 
 import { memo, type JSX } from 'react';
 import { TimeChart, type ChartRow } from '../../lib/charts';
-import { SERIES } from '../../lib/palette';
+import { SERIES } from '../../ui/chartTheme';
 
 export interface StripSample extends ChartRow {
   t: number;
