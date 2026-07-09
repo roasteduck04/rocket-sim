@@ -1,0 +1,178 @@
+/*
+ * Precision Instrument — component styles (Phase 8).
+ *
+ * One section per UI-kit primitive, all token-driven (`--fd-*` only; no literal
+ * colors). Import after tokens.css + base.css. Class prefix `fd-` namespaces
+ * these against the legacy `.panel/.stat/.chip/.btn` classes that remain in
+ * styles.css until each module is migrated onto the kit.
+ */
+
+/* --- Panel ---------------------------------------------------------------- */
+
+.fd-panel {
+  background: var(--fd-surface);
+  border: 1px solid var(--fd-hairline);
+  border-radius: var(--fd-radius-lg);
+  padding: var(--fd-space-4);
+}
+
+.fd-panel + .fd-panel {
+  margin-top: var(--fd-space-4);
+}
+
+.fd-panel__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--fd-space-3);
+  margin-bottom: var(--fd-space-3);
+}
+
+.fd-panel__title {
+  margin: 0;
+  font-size: var(--fd-text-xs);
+  font-weight: var(--fd-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: var(--fd-tracking-caps);
+  color: var(--fd-muted);
+}
+
+.fd-panel__action {
+  display: flex;
+  align-items: center;
+  gap: var(--fd-space-2);
+}
+
+/* --- Stat ----------------------------------------------------------------- */
+
+.fd-stat {
+  background: var(--fd-surface-2);
+  border: 1px solid var(--fd-hairline);
+  border-radius: var(--fd-radius-md);
+  padding: var(--fd-space-2) var(--fd-space-3);
+}
+
+.fd-stat__label {
+  display: block;
+  color: var(--fd-muted);
+  font-size: var(--fd-text-2xs);
+  text-transform: uppercase;
+  letter-spacing: var(--fd-tracking-caps);
+}
+
+.fd-stat__value {
+  display: block;
+  margin-top: 2px;
+  font-family: var(--fd-font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--fd-text-md);
+  font-weight: var(--fd-weight-semibold);
+  color: var(--fd-ink);
+}
+
+.fd-stat__unit {
+  margin-left: var(--fd-space-1);
+  color: var(--fd-ink-2);
+  font-size: var(--fd-text-xs);
+  font-weight: var(--fd-weight-regular);
+}
+
+/* --- Chip ----------------------------------------------------------------- */
+
+.fd-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--fd-space-1);
+  border-radius: var(--fd-radius-pill);
+  padding: 2px var(--fd-space-3);
+  font-size: var(--fd-text-xs);
+  font-weight: var(--fd-weight-semibold);
+  border: 1px solid currentColor;
+  white-space: nowrap;
+}
+
+.fd-chip--neutral {
+  color: var(--fd-muted);
+}
+.fd-chip--accent {
+  color: var(--fd-accent);
+}
+.fd-chip--good {
+  color: var(--fd-good);
+}
+.fd-chip--warning {
+  color: var(--fd-warning);
+}
+.fd-chip--serious {
+  color: var(--fd-serious);
+}
+.fd-chip--critical {
+  color: var(--fd-critical);
+}
+
+/* --- Button --------------------------------------------------------------- */
+
+.fd-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--fd-space-2);
+  border: 1px solid transparent;
+  border-radius: var(--fd-radius-md);
+  font-family: var(--fd-font-sans);
+  font-weight: var(--fd-weight-semibold);
+  line-height: 1;
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    background-color var(--fd-dur-fast) var(--fd-ease-standard),
+    border-color var(--fd-dur-fast) var(--fd-ease-standard),
+    color var(--fd-dur-fast) var(--fd-ease-standard),
+    opacity var(--fd-dur-fast) var(--fd-ease-standard);
+}
+
+.fd-btn--md {
+  padding: var(--fd-space-2) var(--fd-space-4);
+  font-size: var(--fd-text-base);
+}
+
+.fd-btn--sm {
+  padding: var(--fd-space-1) var(--fd-space-3);
+  font-size: var(--fd-text-sm);
+}
+
+.fd-btn--primary {
+  background: var(--fd-accent);
+  color: var(--fd-accent-ink);
+}
+.fd-btn--primary:hover:not(:disabled) {
+  background: var(--fd-accent-strong);
+}
+
+.fd-btn--secondary {
+  background: transparent;
+  color: var(--fd-ink-2);
+  border-color: var(--fd-border);
+}
+.fd-btn--secondary:hover:not(:disabled) {
+  color: var(--fd-ink);
+  border-color: var(--fd-border-strong);
+}
+
+.fd-btn--danger {
+  background: transparent;
+  color: var(--fd-critical);
+  border-color: var(--fd-critical);
+}
+.fd-btn--danger:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--fd-critical) 14%, transparent);
+}
+
+.fd-btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.fd-btn--busy {
+  cursor: progress;
+}

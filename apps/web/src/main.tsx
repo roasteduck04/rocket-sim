@@ -18,6 +18,7 @@ import App from './App';
 // can reference them, then legacy module styles until each view is converged.
 import './ui/tokens.css';
 import './ui/base.css';
+import './ui/ui.css';
 import './styles.css';
 
 const el = document.getElementById('root');

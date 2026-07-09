@@ -59,7 +59,7 @@ Branch: `phase-8-design-language`.
 
 - [x] Stage 0 — Spec + plan committed; roadmap Status tracking stood up
 - [x] Stage 1 — Fonts (Inter + JetBrains Mono) + typed token layer (`ui/tokens.ts`/`.css`, `base.css`)
-- [ ] Stage 2 — Chrome primitives (`Panel/Stat/Chip/Button`) + tests
+- [x] Stage 2 — Chrome primitives (`Panel/Stat/Chip/Button`) + tests
 - [ ] Stage 3 — Form/editor primitives (`Field/NumberField/Select/Slider/TextField/Tree/Tabs/Toolbar/Modal`) + tests
 - [ ] Stage 4 — Chart theme (`ui/chartTheme.ts`); refit charts; fold in `palette.ts`
 - [ ] Stage 5 — Nav shell (left sidebar `AppShell/Sidebar/Header/nav.ts`)
@@ -68,6 +68,10 @@ Branch: `phase-8-design-language`.
 - [ ] Stage 8 — Design-system doc + finalize; flip Phase 8 → ✅
 
 **Progress log** (newest first):
+- 2026-07-09 — Stage 2 done. Added the chrome primitives `Panel`, `Stat`, `Chip` (6 tones),
+  `Button` (primary/secondary/danger · sm/md · `busy`/`disabled`) with token-driven `ui/ui.css`
+  (`fd-*` namespaced) and a barrel `ui/index.ts`. 16 RTL contract tests. Not yet wired into modules
+  (Stage 6). `build:web` + `test:web` green (41 tests).
 - 2026-07-09 — Stage 1 done. Added Inter + JetBrains Mono (variable, `@fontsource-variable`);
   created the typed token layer `ui/tokens.ts` + mirrored `ui/tokens.css` (two-tier
   primitive→semantic, `--fd-*`, graphite + cyan-teal, light seam reserved) and `ui/base.css`
