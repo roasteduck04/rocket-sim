@@ -4,5 +4,6 @@
  */
 export * from './materials.js';
 export * from './components.js';
+export * from './massModel.js';
 
 export const PACKAGE = '@fds/rocket-design';
