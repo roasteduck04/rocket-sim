@@ -8,7 +8,8 @@
       "@fds/atmosphere-models": ["packages/atmosphere-models/src/index.ts"],
       "@fds/aircraft-sim": ["packages/aircraft-sim/src/index.ts"],
       "@fds/rocket-sim": ["packages/rocket-sim/src/index.ts"],
-      "@fds/reentry-sim": ["packages/reentry-sim/src/index.ts"]
+      "@fds/reentry-sim": ["packages/reentry-sim/src/index.ts"],
+      "@fds/rocket-design": ["packages/rocket-design/src/index.ts"]
     }
   },
   "include": [

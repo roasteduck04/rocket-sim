@@ -1,0 +1,13 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist",
+    "baseUrl": ".",
+    "paths": {
+      "@fds/physics-core": ["../physics-core/src/index.ts"],
+      "@fds/rocket-sim": ["../rocket-sim/src/index.ts"]
+    }
+  },
+  "include": ["src/**/*.ts"]
+}

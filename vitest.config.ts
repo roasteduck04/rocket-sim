@@ -14,6 +14,7 @@ export default defineConfig({
       '@fds/aircraft-sim': r('./packages/aircraft-sim/src/index.ts'),
       '@fds/rocket-sim': r('./packages/rocket-sim/src/index.ts'),
       '@fds/reentry-sim': r('./packages/reentry-sim/src/index.ts'),
+      '@fds/rocket-design': r('./packages/rocket-design/src/index.ts'),
     },
   },
   test: {
