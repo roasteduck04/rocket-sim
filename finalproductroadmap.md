@@ -60,7 +60,7 @@ Branch: `phase-8-design-language`.
 - [x] Stage 0 — Spec + plan committed; roadmap Status tracking stood up
 - [x] Stage 1 — Fonts (Inter + JetBrains Mono) + typed token layer (`ui/tokens.ts`/`.css`, `base.css`)
 - [x] Stage 2 — Chrome primitives (`Panel/Stat/Chip/Button`) + tests
-- [ ] Stage 3 — Form/editor primitives (`Field/NumberField/Select/Slider/TextField/Tree/Tabs/Toolbar/Modal`) + tests
+- [x] Stage 3 — Form/editor primitives (`Field/NumberField/Select/Slider/TextField/Tree/Tabs/Toolbar/Modal`) + tests
 - [ ] Stage 4 — Chart theme (`ui/chartTheme.ts`); refit charts; fold in `palette.ts`
 - [ ] Stage 5 — Nav shell (left sidebar `AppShell/Sidebar/Header/nav.ts`)
 - [ ] Stage 6 — Refit A/B/C onto tokens + primitives
@@ -68,6 +68,12 @@ Branch: `phase-8-design-language`.
 - [ ] Stage 8 — Design-system doc + finalize; flip Phase 8 → ✅
 
 **Progress log** (newest first):
+- 2026-07-09 — Stage 3 done. Added the studio form/editor primitives: `Field` (label/control/
+  hint/error skeleton + a11y wiring), `NumberField` (SI unit, drag-to-scrub, clamp/snap, keyboard
+  ↑/↓ ×10), `TextField`, `Select`, `Slider` (native-backed for free a11y), `Tabs` (roving focus),
+  `Toolbar` (+Separator/Spacer), `Tree` (ARIA tree, expand/collapse, keyboard, selection-follows-
+  focus), `Modal` (portal, focus-trap, Esc, focus restore). 17 RTL tests. `build:web` + `test:web`
+  green (58 tests).
 - 2026-07-09 — Stage 2 done. Added the chrome primitives `Panel`, `Stat`, `Chip` (6 tones),
   `Button` (primary/secondary/danger · sm/md · `busy`/`disabled`) with token-driven `ui/ui.css`
   (`fd-*` namespaced) and a barrel `ui/index.ts`. 16 RTL contract tests. Not yet wired into modules
