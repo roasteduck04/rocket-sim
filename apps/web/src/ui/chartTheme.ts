@@ -14,8 +14,12 @@ import { COLOR, CHART, FONT, SERIES as SLOT, SERIES_ORDER, STATUS as STATUS_TOKE
 /** Structured styling for Recharts axes/grid/tooltip/legend + custom SVG. */
 export const chartTheme = {
   surface: COLOR.surface,
-  grid: CHART.grid,
-  axis: CHART.axis,
+  /* Recharts TimeChart lives on a THEMED panel (white in light, graphite in
+     dark), so its grid/axis are a neutral mid-grey that reads on both — unlike
+     the bespoke SVG charts, which paint their own dark viewport and keep the
+     near-white CHART.grid/axis below. Muted (a mid slate) is legible on both. */
+  grid: 'rgba(127, 138, 153, 0.20)',
+  axis: 'rgba(127, 138, 153, 0.45)',
   ink: COLOR.ink,
   ink2: COLOR.ink2,
   muted: COLOR.muted,
@@ -30,7 +34,7 @@ export const chartTheme = {
     fontSize: 12,
     boxShadow: '0 6px 16px -6px rgba(0, 0, 0, 0.5)',
   },
-  legend: { fontSize: 11, color: COLOR.ink2 },
+  legend: { fontSize: 11, color: COLOR.muted },
 } as const;
 
 /**

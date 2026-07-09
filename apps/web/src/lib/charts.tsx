@@ -93,7 +93,7 @@ export const TimeChart = ({
           isAnimationActive={false}
         />
         {series.length > 1 && (
-          <Legend wrapperStyle={{ fontSize: 11, color: chartTheme.ink2 }} iconType="plainline" />
+          <Legend wrapperStyle={{ fontSize: 11, color: chartTheme.muted }} iconType="plainline" />
         )}
         {refLines.map((rl) => (
           <ReferenceLine

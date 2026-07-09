@@ -163,10 +163,54 @@
 }
 
 /*
- * Reserved light-theme seam — Phase 13 (Learn/portfolio tier). Only the
- * SEMANTIC aliases are re-pointed here; primitives and the rest of the token
- * groups (type/space/radii/motion/z) are theme-invariant. Intentionally empty.
+ * Light theme — the same Precision Instrument, in daylight. Only the SEMANTIC
+ * aliases are re-pointed; primitives and the theme-invariant groups
+ * (type/space/radii/motion/z) are inherited from :root. A cool paper canvas
+ * with crisp white panels (not warm cream); graphite ink for strong contrast;
+ * the teal accent deepened so it stays legible as a fill AND a hairline on
+ * white; status colors darkened for legible chips/notes. The dark instrument
+ * viewports (3D scene, landing canvas, envelope hero) paint their own
+ * backgrounds, so they stay dark on the light page by design.
  */
 :root[data-theme='light'] {
-  /* --fd-bg: …; --fd-surface: …; --fd-ink: …; (authored in Phase 13) */
+  color-scheme: light;
+
+  /* Surfaces & depth — white panels lift off a faint cool-grey canvas. */
+  --fd-bg: #f4f6f9;
+  --fd-surface: #ffffff;
+  --fd-surface-2: #eef1f5;
+  --fd-elevated: #ffffff;
+
+  /* Ink — graphite on paper. */
+  --fd-ink: #10151b;
+  --fd-ink-2: #3d4653;
+  --fd-muted: #667080;
+
+  /* Lines. */
+  --fd-border: #d3d9e0;
+  --fd-border-strong: #a9b2be;
+  --fd-hairline: rgba(16, 21, 27, 0.09);
+
+  /* Accent — deeper teal, legible as a fill (white ink) and as a line on white. */
+  --fd-accent: #0d8074;
+  --fd-accent-strong: #0a6b61;
+  --fd-accent-muted: #1fb3a9;
+  --fd-accent-dim: rgba(13, 128, 116, 0.12);
+  --fd-accent-border: rgba(13, 128, 116, 0.38);
+  --fd-accent-ink: #ffffff;
+
+  /* Status — darkened for text/border legibility on light chips & notes. */
+  --fd-good: #1f9d4e;
+  --fd-warning: #9a6a00;
+  --fd-serious: #c2521f;
+  --fd-critical: #cf3030;
+
+  /* Chart furniture (CSS consumers; JS marks keep their own dark-viewport tuning). */
+  --fd-grid: rgba(16, 21, 27, 0.07);
+  --fd-axis: rgba(16, 21, 27, 0.18);
+
+  /* Elevation — softer, cooler shadows on paper. */
+  --fd-elev-1: 0 1px 2px rgba(16, 24, 40, 0.08);
+  --fd-elev-2: 0 6px 16px -6px rgba(16, 24, 40, 0.16);
+  --fd-elev-3: 0 18px 40px -12px rgba(16, 24, 40, 0.22);
 }

@@ -70,6 +70,10 @@ export const EnvelopeMap = ({
 
   return (
     <svg className="ov-envelope-svg" viewBox={`0 0 ${W} ${H}`} role="group" aria-label="Flight envelope — click a regime to enter its module">
+      {/* Full-bleed dark backing: the envelope is a self-contained "blueprint
+          void" instrument plate, so its light-on-dark labels read the same
+          whether the page around it is light or dark. */}
+      <rect x={0} y={0} width={W} height={H} rx={12} fill={OVERVIEW.void} />
       <rect x={M.l} y={M.t} width={PW} height={PH} fill={OVERVIEW.void} stroke={OVERVIEW.line2} />
 
       {/* grid + axis ticks */}

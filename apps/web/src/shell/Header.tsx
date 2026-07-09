@@ -1,15 +1,18 @@
 import type { JSX } from 'react';
+import type { Theme } from '../ui/theme';
 
 export interface HeaderProps {
   collapsed: boolean;
   onToggleSidebar: () => void;
+  theme: Theme;
+  onToggleTheme: () => void;
 }
 
 /**
  * Header — the slim top bar: a sidebar-collapse toggle, the app title, and a
- * trailing slot reserved for a future theme toggle (Phase 13 light theme).
+ * trailing light/dark theme switch.
  */
-export function Header({ collapsed, onToggleSidebar }: HeaderProps): JSX.Element {
+export function Header({ collapsed, onToggleSidebar, theme, onToggleTheme }: HeaderProps): JSX.Element {
   return (
     <header className="fd-header">
       <button
@@ -27,8 +30,15 @@ export function Header({ collapsed, onToggleSidebar }: HeaderProps): JSX.Element
           6-DOF rocket · reentry corridor · linearized aircraft
         </span>
       </div>
-      <div className="fd-header__actions" aria-hidden="true">
-        {/* Reserved: theme toggle (Phase 13). */}
+      <div className="fd-header__actions">
+        <button
+          type="button"
+          className="fd-header__toggle"
+          aria-label={theme === 'light' ? 'Switch to dark theme' : 'Switch to light theme'}
+          onClick={onToggleTheme}
+        >
+          <span aria-hidden="true">{theme === 'light' ? '☾' : '☀'}</span>
+        </button>
       </div>
     </header>
   );
