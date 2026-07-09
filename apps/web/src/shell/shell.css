@@ -1,0 +1,201 @@
+/*
+ * App shell chrome (Phase 8 Stage 5) — the sidebar rail, header, and content
+ * outlet. Token-driven; replaces the old `.app-header` / `.tab-bar` in
+ * styles.css.
+ */
+
+.fd-shell {
+  display: grid;
+  grid-template-columns: 232px minmax(0, 1fr);
+  min-height: 100vh;
+}
+
+.fd-shell--collapsed {
+  grid-template-columns: 60px minmax(0, 1fr);
+}
+
+.fd-shell__main {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.fd-shell__content {
+  flex: 1;
+  padding: var(--fd-space-5) var(--fd-space-5) var(--fd-space-7);
+  min-width: 0;
+}
+
+/* --- Sidebar -------------------------------------------------------------- */
+
+.fd-sidebar {
+  position: sticky;
+  top: 0;
+  align-self: start;
+  height: 100vh;
+  overflow-y: auto;
+  padding: var(--fd-space-4) var(--fd-space-3);
+  background: var(--fd-surface);
+  border-right: 1px solid var(--fd-hairline);
+  display: flex;
+  flex-direction: column;
+  gap: var(--fd-space-4);
+}
+
+.fd-sidebar__group-title {
+  padding: 0 var(--fd-space-2);
+  margin-bottom: var(--fd-space-1);
+  font-size: var(--fd-text-2xs);
+  font-weight: var(--fd-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: var(--fd-tracking-caps);
+  color: var(--fd-muted);
+}
+
+.fd-sidebar--collapsed .fd-sidebar__group-title {
+  visibility: hidden;
+  height: var(--fd-text-2xs);
+}
+
+.fd-sidebar__items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.fd-sidebar__item {
+  display: flex;
+  align-items: center;
+  gap: var(--fd-space-2);
+  width: 100%;
+  padding: var(--fd-space-2) var(--fd-space-2);
+  background: transparent;
+  border: none;
+  border-radius: var(--fd-radius-md);
+  color: var(--fd-ink-2);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background-color var(--fd-dur-fast) var(--fd-ease-standard),
+    color var(--fd-dur-fast) var(--fd-ease-standard);
+}
+
+.fd-sidebar__item:hover:not(:disabled) {
+  background: var(--fd-surface-2);
+  color: var(--fd-ink);
+}
+
+.fd-sidebar__item--active {
+  background: var(--fd-accent-dim);
+  color: var(--fd-ink);
+}
+
+.fd-sidebar__item--disabled {
+  color: var(--fd-muted);
+  cursor: default;
+  opacity: 0.7;
+}
+
+.fd-sidebar__dot {
+  flex: none;
+  width: 6px;
+  height: 6px;
+  border-radius: var(--fd-radius-pill);
+  background: currentColor;
+  opacity: 0.5;
+}
+
+.fd-sidebar__item--active .fd-sidebar__dot {
+  background: var(--fd-accent);
+  opacity: 1;
+}
+
+.fd-sidebar__label {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fd-sidebar--collapsed .fd-sidebar__label {
+  display: none;
+}
+
+.fd-sidebar__soon {
+  flex: none;
+  font-size: var(--fd-text-2xs);
+  font-weight: var(--fd-weight-medium);
+  color: var(--fd-muted);
+  border: 1px solid var(--fd-hairline);
+  border-radius: var(--fd-radius-pill);
+  padding: 0 var(--fd-space-2);
+}
+
+/* --- Header --------------------------------------------------------------- */
+
+.fd-header {
+  position: sticky;
+  top: 0;
+  z-index: var(--fd-z-sticky);
+  display: flex;
+  align-items: center;
+  gap: var(--fd-space-3);
+  padding: var(--fd-space-3) var(--fd-space-5);
+  background: color-mix(in srgb, var(--fd-bg) 88%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--fd-hairline);
+}
+
+.fd-header__toggle {
+  flex: none;
+  background: transparent;
+  border: 1px solid var(--fd-hairline);
+  border-radius: var(--fd-radius-sm);
+  color: var(--fd-ink-2);
+  font-size: var(--fd-text-md);
+  line-height: 1;
+  padding: var(--fd-space-1) var(--fd-space-2);
+  cursor: pointer;
+}
+
+.fd-header__toggle:hover {
+  color: var(--fd-ink);
+  border-color: var(--fd-border-strong);
+}
+
+.fd-header__brand {
+  display: flex;
+  align-items: baseline;
+  gap: var(--fd-space-3);
+  min-width: 0;
+}
+
+.fd-header__title {
+  margin: 0;
+  font-size: var(--fd-text-md);
+  font-weight: var(--fd-weight-semibold);
+  letter-spacing: var(--fd-tracking-tight);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fd-header__subtitle {
+  color: var(--fd-muted);
+  font-size: var(--fd-text-sm);
+  white-space: nowrap;
+}
+
+.fd-header__actions {
+  margin-left: auto;
+}
+
+@media (max-width: 720px) {
+  .fd-header__subtitle {
+    display: none;
+  }
+}

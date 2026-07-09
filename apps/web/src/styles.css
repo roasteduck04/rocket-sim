@@ -53,59 +53,8 @@
   --ov-mono: 'Space Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
 }
 
-/* Reset, html/body, and #root now live in ui/base.css (Phase 8). */
-
-.app-header {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 1.5rem;
-  padding: 0.9rem 1.4rem;
-  border-bottom: 1px solid var(--border);
-}
-
-.app-header h1 {
-  font-size: 1.05rem;
-  font-weight: 600;
-  margin: 0;
-  letter-spacing: 0.02em;
-}
-
-.app-header .subtitle {
-  color: var(--muted);
-  font-size: 0.85rem;
-}
-
-.tab-bar {
-  display: flex;
-  gap: 0.5rem;
-  margin-left: auto;
-}
-
-.tab-bar button {
-  background: transparent;
-  color: var(--ink-2);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 0.45rem 1rem;
-  font: inherit;
-  cursor: pointer;
-}
-
-.tab-bar button:hover {
-  color: var(--ink);
-  border-color: var(--muted);
-}
-
-.tab-bar button[aria-pressed='true'] {
-  color: var(--ink);
-  border-color: var(--series-1);
-  background: rgba(57, 135, 229, 0.12);
-}
-
-.module {
-  padding: 1.2rem 1.4rem 3rem;
-}
+/* Reset, html/body, and #root now live in ui/base.css (Phase 8).
+   App header + tab bar replaced by the sidebar shell in shell/shell.css. */
 
 .module-grid {
   display: grid;

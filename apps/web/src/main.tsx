@@ -19,6 +19,7 @@ import App from './App';
 import './ui/tokens.css';
 import './ui/base.css';
 import './ui/ui.css';
+import './shell/shell.css';
 import './styles.css';
 
 const el = document.getElementById('root');

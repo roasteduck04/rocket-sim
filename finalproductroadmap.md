@@ -62,12 +62,18 @@ Branch: `phase-8-design-language`.
 - [x] Stage 2 — Chrome primitives (`Panel/Stat/Chip/Button`) + tests
 - [x] Stage 3 — Form/editor primitives (`Field/NumberField/Select/Slider/TextField/Tree/Tabs/Toolbar/Modal`) + tests
 - [x] Stage 4 — Chart theme (`ui/chartTheme.ts`); refit charts; fold in `palette.ts`
-- [ ] Stage 5 — Nav shell (left sidebar `AppShell/Sidebar/Header/nav.ts`)
+- [x] Stage 5 — Nav shell (left sidebar `AppShell/Sidebar/Header/nav.ts`)
 - [ ] Stage 6 — Refit A/B/C onto tokens + primitives
 - [ ] Stage 7 — Re-skin D + Overview onto the unified language
 - [ ] Stage 8 — Design-system doc + finalize; flip Phase 8 → ✅
 
 **Progress log** (newest first):
+- 2026-07-09 — Stage 5 done. Added the sidebar nav shell: `shell/nav.ts` (data-driven `NAV_GROUPS`
+  — Simulators / Studio / Analysis / Learn, Phase 9+ as disabled placeholders), `shell/Sidebar`
+  (grouped, collapsible, active highlight), `shell/Header` (title + collapse toggle + reserved
+  theme-toggle slot), `shell/AppShell` (frame). Rewrote `App.tsx` onto `AppShell`, preserving
+  one-view-mounted semantics + the Overview `onEnter` launcher. Removed `.app-header`/`.tab-bar`/
+  `.module` from styles.css. Smoke test (sidebar nav) green. `build:web` + `test:web` (58) green.
 - 2026-07-09 — Stage 4 done. Added `ui/chartTheme.ts` (token-derived axis/grid/tooltip/legend +
   categorical `SERIES`/`STATUS`); refit `lib/charts.tsx` (TimeChart) and the five bespoke charts
   (Corridor/Strip/AltVel/HeatGLoad/GroundTrack) to consume it. Folded `SERIES`/`STATUS` into the
