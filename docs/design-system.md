@@ -1,8 +1,9 @@
 # Precision Instrument — design system
 
 The web app's shared visual language (established in Phase 8, `finalproductroadmap.md`).
-Dark-first, light-ready; calm, dense-capable, trustworthy. Every module (A–D + Overview)
-renders on this system, and Phase 9+ features are built on it rather than restyled.
+Light and dark themes (light by default), switchable from the header; calm, dense-capable,
+trustworthy. Every module (A–D + Overview) renders on this system, and Phase 9+ features are
+built on it rather than restyled.
 
 - **Base:** graphite surfaces, hairline dividers, depth from soft elevation.
 - **Accent:** a single cyan-teal signature (`--fd-accent`). No per-module accents.
@@ -15,7 +16,8 @@ renders on this system, and Phase 9+ features are built on it rather than restyl
 ```
 apps/web/src/ui/
   tokens.ts     typed token source (JS/SVG/canvas/Recharts marks)
-  tokens.css    :root custom properties mirroring tokens.ts (+ reserved light seam)
+  tokens.css    :root custom properties mirroring tokens.ts (light + dark themes)
+  theme.ts      light/dark switch (data-theme on <html> + localStorage)
   base.css      reset, html/body, focus ring
   ui.css        component styles (fd-* classes)
   Panel/Stat/Chip/Button                     chrome primitives
@@ -54,9 +56,14 @@ Only semantic names appear at call sites.
 | Motion | `--fd-dur-fast/base/slow`, `--fd-ease-standard/emphasized` |
 | Z-index | `--fd-z-base/sticky/overlay/modal/toast` |
 
-**Light theme (Phase 13):** a reserved `:root[data-theme="light"]` block in `tokens.css`
-documents the seam. Only the semantic aliases are re-pointed there; primitives and the
-type/space/radii/motion groups are theme-invariant. No light values are authored yet.
+**Theming.** The app ships **light (default) and dark**. The active theme is a `data-theme`
+attribute on `<html>`; `:root[data-theme="light"]` in `tokens.css` re-points the semantic
+aliases (primitives and the type/space/radii/motion groups stay theme-invariant). An inline
+script in `index.html` sets the attribute before first paint (default light, persisted to
+`localStorage`); the header's ☾/☀ button toggles it through `ui/theme.ts`. Because every legacy
+`--l-*` / `--ov-*` / `--page` token aliases `--fd-*`, both themes flow through Module A–D +
+Overview with no per-view work. In light mode the teal accent deepens (`--fd-accent`) so it stays
+legible as a fill and a hairline on white, and status colors darken for legible chips/notes.
 
 ## Component inventory
 
@@ -95,6 +102,13 @@ Rules: one y-scale per chart (never dual-axis), thin 2 px lines, recessive grid,
 tooltip, legend only for ≥ 2 series. Series colors come from `SERIES` (fixed order, assigned
 per entity, never cycled); status colors are reserved for limits/verdicts.
 
+**Charts and theme.** The Recharts `TimeChart` sits on a themed panel, so its grid/axis use a
+theme-neutral mid-grey that reads on light and dark. The bespoke SVG charts — plus the 3D
+trajectory scene, the landing canvas, and the Overview envelope hero — paint their own dark
+viewport backgrounds and stay dark in both themes by design: a light dashboard with dark
+instrument scopes. Their light-on-dark neutrals come from the `tokens.ts` constants, which are
+theme-invariant.
+
 ## Navigation
 
 `shell/AppShell` = grouped `Sidebar` + slim `Header` + a `<main>` outlet, preserving the
@@ -107,6 +121,8 @@ data-driven in `shell/nav.ts` — a later phase adds a nav entry + a view, no sh
 - **Do** put every telemetry number in the mono family with tabular figures (`.fd-num` or a
   primitive that already does).
 - **Do** animate only `transform`/`opacity`, within the motion-duration tokens.
+- **Do** keep JS-drawn instrument viewports self-contained — paint their own background so they
+  read on either theme — rather than inheriting the panel surface.
 - **Don't** introduce a new accent — the cyan-teal is the whole brand. Status colors are for
   limits/verdicts, never decoration or a data series.
 - **Don't** cycle series colors; assign a fixed slot per entity so it stays stable across charts.

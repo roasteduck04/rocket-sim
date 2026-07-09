@@ -70,6 +70,14 @@ Design system: `docs/design-system.md` · Branch: `phase-8-design-language`.
 - [x] Stage 8 — Design-system doc + finalize; flip Phase 8 → ✅
 
 **Progress log** (newest first):
+- 2026-07-09 — Post-Phase-8 design pass (branch `design-polish-whole-app`): a whole-app polish
+  tightening (mono axis numerals, elevation, sidebar/header, panel dividers, legacy chrome aligned
+  to the fd token scale), then **shipped the light theme early** — authored the `[data-theme="light"]`
+  token block, a pre-paint theme init (default light) + a header ☾/☀ switch (`ui/theme.ts`), a
+  theme-neutral Recharts grid/axis, and a full-bleed dark backing for the envelope hero. The light
+  theme was reserved for Phase 13; pulled forward on request. Dark instrument viewports (3D scene,
+  landing canvas, envelope) stay dark by design; physics untouched. `test:web` (58) + `build:web`
+  green. `docs/design-system.md` updated (theming, charts-and-theme). Not yet merged.
 - 2026-07-09 — Stage 8 done → **Phase 8 complete.** Wrote `docs/design-system.md` (tokens,
   component inventory + usage, chart/nav notes, do/don't). Full verification green: packages `test`
   (331, physics untouched), `test:web` (58), `build:web`. Flipped Phase 8 Status → ✅. Every A–D +
