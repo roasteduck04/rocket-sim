@@ -1,0 +1,171 @@
+/*
+ * Precision Instrument — design tokens (Phase 8, finalproductroadmap §Phase 8).
+ *
+ * The single source of truth for the app's visual language. Two tiers:
+ *   1. PRIMITIVE ramps  (--fd-p-*) — raw hex, the only place literal colors live.
+ *   2. SEMANTIC aliases (--fd-*)   — role-named; the ONLY names components use.
+ *
+ * This file is hand-mirrored by `ui/tokens.ts` (the typed source consumed by
+ * SVG/canvas/Recharts marks). Keep the two in sync — same paired convention the
+ * old `palette.ts ↔ styles.css` used. All `--fd-*` names are namespaced so they
+ * coexist with the legacy `--page/--surface/--l-*/--ov-*` tokens during the
+ * Phase 8 migration; the legacy set is deleted once every view is converged.
+ *
+ * Dark-first, light-ready: values are authored for dark only. The reserved
+ * `:root[data-theme="light"]` block at the bottom documents the seam a light
+ * theme (Phase 13) fills in — no light values are authored now.
+ */
+
+:root {
+  /* ---- Primitive ramps (raw hex — do not reference at call sites) --------- */
+
+  /* Graphite — cool neutral base (backgrounds, borders). */
+  --fd-p-graphite-950: #0a0d11;
+  --fd-p-graphite-900: #0e1216;
+  --fd-p-graphite-850: #12171d;
+  --fd-p-graphite-800: #171d24;
+  --fd-p-graphite-750: #1d242d;
+  --fd-p-graphite-700: #232b35;
+  --fd-p-graphite-600: #2e3742;
+  --fd-p-graphite-500: #3b4551;
+
+  /* Slate — cool light greys (text). */
+  --fd-p-slate-050: #eef1f5;
+  --fd-p-slate-200: #cbd2db;
+  --fd-p-slate-400: #97a1af;
+  --fd-p-slate-500: #6c7684;
+  --fd-p-slate-600: #545d6a;
+
+  /* Teal — the single cyan-teal signature accent. */
+  --fd-p-teal-300: #63e6dd;
+  --fd-p-teal-400: #33d6cb;
+  --fd-p-teal-500: #1fb3a9;
+  --fd-p-teal-700: #146b66;
+
+  /* Categorical series (fixed order; assigned per entity, never cycled). */
+  --fd-p-blue: #5b9bff;
+  --fd-p-orange: #ffb454;
+  --fd-p-green: #52d99e;
+  --fd-p-violet: #c07cff;
+  --fd-p-pink: #ff738a;
+  --fd-p-lime: #cbd94a;
+
+  /* Status (reserved for limits/verdicts, never a series). */
+  --fd-p-status-good: #35c65a;
+  --fd-p-status-warning: #f5b73c;
+  --fd-p-status-serious: #f0894e;
+  --fd-p-status-critical: #ec5a5a;
+
+  /* ---- Semantic aliases (the palette components speak) -------------------- */
+
+  /* Surfaces & depth. */
+  --fd-bg: var(--fd-p-graphite-950);
+  --fd-surface: var(--fd-p-graphite-900);
+  --fd-surface-2: var(--fd-p-graphite-850);
+  --fd-elevated: var(--fd-p-graphite-800);
+
+  /* Ink. */
+  --fd-ink: var(--fd-p-slate-050);
+  --fd-ink-2: var(--fd-p-slate-400);
+  --fd-muted: var(--fd-p-slate-500);
+
+  /* Lines. */
+  --fd-border: var(--fd-p-graphite-600);
+  --fd-border-strong: var(--fd-p-graphite-500);
+  --fd-hairline: rgba(230, 238, 247, 0.07);
+
+  /* Accent. */
+  --fd-accent: var(--fd-p-teal-400);
+  --fd-accent-strong: var(--fd-p-teal-300);
+  --fd-accent-muted: var(--fd-p-teal-500);
+  --fd-accent-dim: rgba(51, 214, 203, 0.13);
+  --fd-accent-border: rgba(51, 214, 203, 0.35);
+  --fd-accent-ink: #06110f; /* text/icons on an accent fill */
+
+  /* Categorical + status semantic handles. */
+  --fd-series-1: var(--fd-p-blue);
+  --fd-series-2: var(--fd-p-green);
+  --fd-series-3: var(--fd-p-orange);
+  --fd-series-4: var(--fd-p-violet);
+  --fd-series-5: var(--fd-p-pink);
+  --fd-series-6: var(--fd-p-lime);
+  --fd-good: var(--fd-p-status-good);
+  --fd-warning: var(--fd-p-status-warning);
+  --fd-serious: var(--fd-p-status-serious);
+  --fd-critical: var(--fd-p-status-critical);
+
+  /* Chart furniture (recessive; text never wears these). */
+  --fd-grid: rgba(230, 238, 247, 0.06);
+  --fd-axis: rgba(230, 238, 247, 0.16);
+
+  /* ---- Typography -------------------------------------------------------- */
+  --fd-font-sans: 'Inter Variable', 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --fd-font-mono: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
+
+  --fd-text-2xs: 0.6875rem; /* 11px */
+  --fd-text-xs: 0.75rem;    /* 12px */
+  --fd-text-sm: 0.8125rem;  /* 13px */
+  --fd-text-base: 0.875rem; /* 14px */
+  --fd-text-md: 1rem;       /* 16px */
+  --fd-text-lg: 1.1875rem;  /* 19px */
+  --fd-text-xl: 1.4375rem;  /* 23px */
+  --fd-text-2xl: 1.75rem;   /* 28px */
+  --fd-text-3xl: 2.125rem;  /* 34px */
+
+  --fd-weight-regular: 400;
+  --fd-weight-medium: 500;
+  --fd-weight-semibold: 600;
+  --fd-weight-bold: 700;
+
+  --fd-leading-tight: 1.2;
+  --fd-leading-snug: 1.35;
+  --fd-leading-normal: 1.5;
+
+  --fd-tracking-tight: -0.01em;
+  --fd-tracking-normal: 0;
+  --fd-tracking-wide: 0.02em;
+  --fd-tracking-caps: 0.06em;
+
+  /* ---- Space (4px base) -------------------------------------------------- */
+  --fd-space-1: 4px;
+  --fd-space-2: 8px;
+  --fd-space-3: 12px;
+  --fd-space-4: 16px;
+  --fd-space-5: 24px;
+  --fd-space-6: 32px;
+  --fd-space-7: 48px;
+
+  /* ---- Radii ------------------------------------------------------------- */
+  --fd-radius-sm: 4px;
+  --fd-radius-md: 8px;
+  --fd-radius-lg: 12px;
+  --fd-radius-pill: 999px;
+
+  /* ---- Elevation (soft shadows on graphite) ------------------------------ */
+  --fd-elev-1: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --fd-elev-2: 0 4px 12px rgba(0, 0, 0, 0.45);
+  --fd-elev-3: 0 12px 32px rgba(0, 0, 0, 0.5);
+
+  /* ---- Motion (quiet, fast; transform/opacity only) ---------------------- */
+  --fd-dur-fast: 120ms;
+  --fd-dur-base: 160ms;
+  --fd-dur-slow: 220ms;
+  --fd-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --fd-ease-emphasized: cubic-bezier(0.4, 0, 0.1, 1);
+
+  /* ---- Z-index layers ---------------------------------------------------- */
+  --fd-z-base: 0;
+  --fd-z-sticky: 100;
+  --fd-z-overlay: 200;
+  --fd-z-modal: 300;
+  --fd-z-toast: 400;
+}
+
+/*
+ * Reserved light-theme seam — Phase 13 (Learn/portfolio tier). Only the
+ * SEMANTIC aliases are re-pointed here; primitives and the rest of the token
+ * groups (type/space/radii/motion/z) are theme-invariant. Intentionally empty.
+ */
+:root[data-theme='light'] {
+  /* --fd-bg: …; --fd-surface: …; --fd-ink: …; (authored in Phase 13) */
+}

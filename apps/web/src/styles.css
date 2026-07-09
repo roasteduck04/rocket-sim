@@ -53,24 +53,7 @@
   --ov-mono: 'Space Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
 }
 
-* {
-  box-sizing: border-box;
-}
-
-html,
-body {
-  margin: 0;
-  padding: 0;
-  background: var(--page);
-  color: var(--ink);
-  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
-  font-size: 14px;
-  line-height: 1.45;
-}
-
-#root {
-  min-height: 100vh;
-}
+/* Reset, html/body, and #root now live in ui/base.css (Phase 8). */
 
 .app-header {
   display: flex;

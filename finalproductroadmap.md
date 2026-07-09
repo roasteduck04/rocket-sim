@@ -58,7 +58,7 @@ Plan: `docs/superpowers/plans/2026-07-08-phase-8-design-language.md` ·
 Branch: `phase-8-design-language`.
 
 - [x] Stage 0 — Spec + plan committed; roadmap Status tracking stood up
-- [ ] Stage 1 — Fonts (Inter + JetBrains Mono) + typed token layer (`ui/tokens.ts`/`.css`, `base.css`)
+- [x] Stage 1 — Fonts (Inter + JetBrains Mono) + typed token layer (`ui/tokens.ts`/`.css`, `base.css`)
 - [ ] Stage 2 — Chrome primitives (`Panel/Stat/Chip/Button`) + tests
 - [ ] Stage 3 — Form/editor primitives (`Field/NumberField/Select/Slider/TextField/Tree/Tabs/Toolbar/Modal`) + tests
 - [ ] Stage 4 — Chart theme (`ui/chartTheme.ts`); refit charts; fold in `palette.ts`
@@ -68,6 +68,11 @@ Branch: `phase-8-design-language`.
 - [ ] Stage 8 — Design-system doc + finalize; flip Phase 8 → ✅
 
 **Progress log** (newest first):
+- 2026-07-09 — Stage 1 done. Added Inter + JetBrains Mono (variable, `@fontsource-variable`);
+  created the typed token layer `ui/tokens.ts` + mirrored `ui/tokens.css` (two-tier
+  primitive→semantic, `--fd-*`, graphite + cyan-teal, light seam reserved) and `ui/base.css`
+  (reset/body/focus, re-pointed to tokens + Inter). Saira/Space Mono kept until Stage 7 (still used
+  by `--l-*`/`--ov-*`). `build:web` + `test:web` green (25 tests).
 - 2026-07-08 — Phase 8 brainstormed and planned. Locked: fresh "Precision Instrument" language,
   dark-first/light-ready tokens, left-sidebar nav, Inter + JetBrains Mono, full D/Overview
   convergence. Spec + plan committed; progress tracking stood up. Build not yet started.
