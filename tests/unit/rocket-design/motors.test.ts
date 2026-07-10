@@ -31,3 +31,28 @@ describe('impulseClassOf', () => {
     expect(impulseClassOf(9.9)).toBe('C');
   });
 });
+
+describe('parseEng — single-sample curve', () => {
+  // A degenerate .eng with exactly one time/thrust pair: burn time is 0, so
+  // totalImpulseNs / burnTimeS would be 0/0 (NaN) without the guard.
+  const single = 'Stub 18 70 0 0.0108 0.0242 Estes\n0.000 5.0\n;\n';
+  const motor = parseEng('Stub', single);
+
+  it('yields avgThrustN === 0, not NaN', () => {
+    expect(motor.burnTimeS).toBe(0);
+    expect(motor.avgThrustN).toBe(0);
+  });
+
+  it('has no NaN anywhere in the parsed Motor', () => {
+    const numericFields = [
+      motor.diameterM,
+      motor.lengthM,
+      motor.propellantKg,
+      motor.totalKg,
+      motor.totalImpulseNs,
+      motor.avgThrustN,
+      motor.burnTimeS,
+    ];
+    for (const v of numericFields) expect(Number.isNaN(v)).toBe(false);
+  });
+});

@@ -23,7 +23,7 @@ export const buildRocketConfig = (design: RocketDesign, motor: Motor): RocketCon
 
   // Motor sits at the aft body end; grain length = motor length, aft face at `length`.
   const motorAft = length;
-  const motorFore = length - motor.lengthM;
+  const motorFore = Math.max(0, length - motor.lengthM);
   const propCgFull = (motorFore + motorAft) / 2;
   const effIsp = motor.propellantKg > 0 ? motor.totalImpulseNs / (G0 * motor.propellantKg) : 1;
 

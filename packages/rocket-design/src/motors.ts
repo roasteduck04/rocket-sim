@@ -58,7 +58,7 @@ export const parseEng = (id: string, text: string): Motor => {
     totalKg: Number(totalKg),
     thrustCurve,
     totalImpulseNs,
-    avgThrustN: totalImpulseNs / burnTimeS,
+    avgThrustN: burnTimeS > 0 ? totalImpulseNs / burnTimeS : 0,
     burnTimeS,
     impulseClass: impulseClassOf(totalImpulseNs),
   };
