@@ -52,10 +52,20 @@ below — the single source of truth for cross-session progress (no separate pro
 
 ### 3.1 Live status
 
-**Phase 8 complete (2026-07-09). Next active phase: 9 — Rocket design studio** (not yet started).
-When starting Phase 9, replace this block with its spec/plan/branch pointers.
+**Phase 9 IN PROGRESS (started 2026-07-10) — Rocket design studio.** Building slice 1, a
+walking skeleton: a new `@fds/rocket-design` package (parametric parts → mass / Barrowman aero /
+drag / motor / `RocketConfig`) plus an `apps/web` design studio, generating the sim's inputs and
+flying them in the **untouched** 6-DOF core, validated against OpenRocket's Estes Alpha III.
 
-Phase 8 reference — Spec: `docs/superpowers/specs/2026-07-08-phase-8-design-language-design.md` ·
+Phase 9 slice 1 — Plan: `docs/superpowers/plans/2026-07-09-phase-9-design-studio-walking-skeleton.md` ·
+Branch: `phase-9-design-studio` · executed subagent-driven (per-task TDD + review).
+
+- [x] T1 Scaffold `@fds/rocket-design` · [x] T2 Materials + component model + Alpha III preset
+- [x] T3 Mass/CG/inertia · [x] T4 `.eng` motor parser + Estes A8/B6/C6 · [x] T5 Barrowman CNα/CP/margin
+- [ ] T6 Drag buildup · [ ] T7 Aero-table gen · [ ] T8 `buildConfig` bridge · [ ] T9 Alpha III cross-check
+- [ ] T10–15 Studio UI (tree · inspector · schematic · motor picker · Fly it) · [ ] T16 Verify + finalize
+
+Phase 8 (complete 2026-07-09) reference — Spec: `docs/superpowers/specs/2026-07-08-phase-8-design-language-design.md` ·
 Plan: `docs/superpowers/plans/2026-07-08-phase-8-design-language.md` ·
 Design system: `docs/design-system.md` · Branch: `phase-8-design-language`.
 
@@ -70,6 +80,12 @@ Design system: `docs/design-system.md` · Branch: `phase-8-design-language`.
 - [x] Stage 8 — Design-system doc + finalize; flip Phase 8 → ✅
 
 **Progress log** (newest first):
+- 2026-07-10 — **Phase 9 slice 1 started** (branch `phase-9-design-studio`, subagent-driven per-task
+  TDD + review). Done so far: T1 scaffolded `@fds/rocket-design`; T2 materials + parametric component
+  model + Alpha III preset; T3 mass/CG/inertia; T4 RASP `.eng` parser + curated Estes A8/B6/C6; T5
+  subsonic Barrowman (Alpha III CNα≈10.6, CP≈0.234 m, margin≈1.31 cal — CP within ~5% of OpenRocket).
+  Core `packages/rocket-sim`/`physics-core` untouched. Remaining: drag → aero table → buildConfig →
+  Alpha III cross-check → studio UI → verify.
 - 2026-07-09 — Stage 8 done → **Phase 8 complete.** Wrote `docs/design-system.md` (tokens,
   component inventory + usage, chart/nav notes, do/don't). Full verification green: packages `test`
   (331, physics untouched), `test:web` (58), `build:web`. Flipped Phase 8 Status → ✅. Every A–D +
