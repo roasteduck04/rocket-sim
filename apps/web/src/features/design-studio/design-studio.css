@@ -1,7 +1,8 @@
 /* Task 11 — Design Studio layout. Three columns (tree / schematic / inspector)
    collapse to a single column below 900px. Task 12 fills the right column
    with the part inspector; Task 13 fills the middle column with the live
-   schematic. */
+   schematic. Task 14 adds the motor picker and design summary strip to the
+   right column. */
 
 .design-studio {
   display: grid;
@@ -47,6 +48,26 @@
 .ds-margin {
   margin: 0;
   font-size: var(--fd-text-sm);
+}
+
+.ds-motor {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fd-space-2);
+  padding: var(--fd-space-3);
+  border: 1px solid var(--fd-border);
+  border-radius: var(--fd-radius-lg);
+  background: var(--fd-surface);
+}
+
+.ds-summary {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--fd-space-2);
+  padding: var(--fd-space-3);
+  border: 1px solid var(--fd-border);
+  border-radius: var(--fd-radius-lg);
+  background: var(--fd-surface);
 }
 
 @media (max-width: 900px) {
