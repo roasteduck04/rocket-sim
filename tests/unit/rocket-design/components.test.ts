@@ -10,9 +10,9 @@ describe('materials', () => {
 });
 
 describe('Alpha III preset', () => {
-  it('is a nose + tube + 3-fin stack on a C motor', () => {
+  it('is a nose + located hardware masses + tube + 3-fin stack on a C motor', () => {
     const kinds = ALPHA_III.parts.map((p) => p.kind);
-    expect(kinds).toEqual(['nose', 'tube', 'fins']);
+    expect(kinds).toEqual(['nose', 'mass', 'tube', 'fins', 'mass']);
     const fins = ALPHA_III.parts.find((p) => p.kind === 'fins');
     expect(fins?.kind === 'fins' && fins.count).toBe(3);
     expect(ALPHA_III.motorId).toBe('Estes_C6');
