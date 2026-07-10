@@ -40,6 +40,32 @@ export function ComponentTree({
   dispatch: (a: DesignAction) => void;
 }): JSX.Element {
   const nodes = design.parts.map((p, i) => ({ id: String(i), label: label(p) }));
+  // A selection index is only meaningful while it points at a live part —
+  // after a remove (or before anything is selected) it can be -1 or stale,
+  // so every button's enabled state derives from this rather than a bare
+  // sign check (finding 1b).
+  const hasValidSelection = selectedIndex >= 0 && selectedIndex < design.parts.length;
+
+  const handleMove = (dir: -1 | 1): void => {
+    const destination = selectedIndex + dir;
+    if (!hasValidSelection || destination < 0 || destination >= design.parts.length) return;
+    dispatch({ type: 'movePart', index: selectedIndex, dir });
+    // Selection follows the moved part so a second click moves the same
+    // item again instead of its now-adjacent neighbour (finding 2).
+    onSelect(destination);
+  };
+
+  const handleRemove = (): void => {
+    if (!hasValidSelection) return;
+    const removedIndex = selectedIndex;
+    dispatch({ type: 'removePart', index: removedIndex });
+    const newLength = design.parts.length - 1;
+    // Clamp selection into the post-remove array instead of leaving it
+    // pointing past the end, which previously let ↑/↓ dispatch a move with
+    // an out-of-range index and corrupt the parts array (finding 1b).
+    onSelect(newLength <= 0 ? -1 : Math.min(removedIndex, newLength - 1));
+  };
+
   return (
     <div className="ds-tree">
       <Toolbar aria-label="Component tree actions">
@@ -49,26 +75,21 @@ export function ComponentTree({
         <Button
           size="sm"
           variant="secondary"
-          disabled={selectedIndex < 0}
-          onClick={() => dispatch({ type: 'movePart', index: selectedIndex, dir: -1 })}
+          disabled={!hasValidSelection || selectedIndex === 0}
+          onClick={() => handleMove(-1)}
         >
           ↑
         </Button>
         <Button
           size="sm"
           variant="secondary"
-          disabled={selectedIndex < 0}
-          onClick={() => dispatch({ type: 'movePart', index: selectedIndex, dir: 1 })}
+          disabled={!hasValidSelection || selectedIndex === design.parts.length - 1}
+          onClick={() => handleMove(1)}
         >
           ↓
         </Button>
         <Toolbar.Spacer />
-        <Button
-          size="sm"
-          variant="danger"
-          disabled={selectedIndex < 0}
-          onClick={() => dispatch({ type: 'removePart', index: selectedIndex })}
-        >
+        <Button size="sm" variant="danger" disabled={!hasValidSelection} onClick={handleRemove}>
           Remove
         </Button>
       </Toolbar>

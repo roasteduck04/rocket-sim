@@ -25,6 +25,10 @@ export const designReducer = (state: RocketDesign, action: DesignAction): Rocket
     case 'removePart':
       return { ...state, parts: state.parts.filter((_, i) => i !== action.index) };
     case 'movePart': {
+      // Defense in depth: the reducer must never produce an undefined hole,
+      // so both the source index and destination index are bounds-checked
+      // even though the UI is also expected to keep `index` in range.
+      if (action.index < 0 || action.index >= state.parts.length) return state;
       const j = action.index + action.dir;
       if (j < 0 || j >= state.parts.length) return state;
       const parts = state.parts.slice();
