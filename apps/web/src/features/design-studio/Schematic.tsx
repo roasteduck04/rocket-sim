@@ -18,6 +18,13 @@ const VH = 160;
 const PAD = 24;
 
 export function Schematic({ design }: { design: RocketDesign }): JSX.Element {
+  if (design.parts.length === 0) {
+    return (
+      <div className="ds-schematic">
+        <p className="ds-margin">Add components to see the schematic.</p>
+      </div>
+    );
+  }
   const stations = partStations(design);
   const b = barrowman(design);
   const dm = dryMassProps(design);
