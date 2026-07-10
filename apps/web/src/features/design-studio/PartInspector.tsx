@@ -8,17 +8,11 @@
  */
 
 import type { JSX } from 'react';
-import type { BodyTube, FinSet, MassComponent, NoseCone, Part } from '@fds/rocket-design';
+import type { Part } from '@fds/rocket-design';
 import { MATERIALS } from '@fds/rocket-design';
 import type { MaterialId } from '@fds/rocket-design';
 import { NumberField, Panel, Select } from '../../ui';
 import type { DesignAction } from './designModel';
-
-// `keyof (A | B | ...)` only yields keys common to every union member, so a
-// single `Partial<Part>` can't express "a patch of whichever variant is
-// selected". Union the per-variant partials instead — the final `as Part`
-// cast in `set` still asserts the merged shape back down to `Part`.
-type PartPatch = Partial<NoseCone> | Partial<BodyTube> | Partial<FinSet> | Partial<MassComponent>;
 
 export function PartInspector({
   part,
@@ -37,8 +31,8 @@ export function PartInspector({
     );
   }
 
-  const set = (patch: PartPatch): void =>
-    dispatch({ type: 'updatePart', index, part: { ...part, ...patch } as Part });
+  const set = <P extends Part>(current: P, patch: Partial<P>): void =>
+    dispatch({ type: 'updatePart', index, part: { ...current, ...patch } });
 
   return (
     <Panel title={part.kind}>
@@ -47,7 +41,7 @@ export function PartInspector({
           <Select
             label="Shape"
             value={part.shape}
-            onChange={(v) => set({ shape: v })}
+            onChange={(v) => set(part, { shape: v })}
             options={[
               { value: 'ogive', label: 'Ogive' },
               { value: 'cone', label: 'Cone' },
@@ -59,7 +53,7 @@ export function PartInspector({
             value={part.lengthM}
             step={0.001}
             min={0.001}
-            onChange={(v) => set({ lengthM: v })}
+            onChange={(v) => set(part, { lengthM: v })}
           />
           <NumberField
             label="Base radius"
@@ -67,7 +61,7 @@ export function PartInspector({
             value={part.baseRadiusM}
             step={0.001}
             min={0.001}
-            onChange={(v) => set({ baseRadiusM: v })}
+            onChange={(v) => set(part, { baseRadiusM: v })}
           />
         </>
       )}
@@ -79,7 +73,7 @@ export function PartInspector({
             value={part.lengthM}
             step={0.001}
             min={0.001}
-            onChange={(v) => set({ lengthM: v })}
+            onChange={(v) => set(part, { lengthM: v })}
           />
           <NumberField
             label="Outer radius"
@@ -87,7 +81,7 @@ export function PartInspector({
             value={part.outerRadiusM}
             step={0.001}
             min={0.001}
-            onChange={(v) => set({ outerRadiusM: v })}
+            onChange={(v) => set(part, { outerRadiusM: v })}
           />
         </>
       )}
@@ -98,7 +92,7 @@ export function PartInspector({
             value={part.count}
             step={1}
             min={1}
-            onChange={(v) => set({ count: Math.round(v) })}
+            onChange={(v) => set(part, { count: Math.round(v) })}
           />
           <NumberField
             label="Root chord"
@@ -106,7 +100,7 @@ export function PartInspector({
             value={part.rootChordM}
             step={0.001}
             min={0.001}
-            onChange={(v) => set({ rootChordM: v })}
+            onChange={(v) => set(part, { rootChordM: v })}
           />
           <NumberField
             label="Tip chord"
@@ -114,7 +108,7 @@ export function PartInspector({
             value={part.tipChordM}
             step={0.001}
             min={0}
-            onChange={(v) => set({ tipChordM: v })}
+            onChange={(v) => set(part, { tipChordM: v })}
           />
           <NumberField
             label="Semi-span"
@@ -122,16 +116,22 @@ export function PartInspector({
             value={part.semiSpanM}
             step={0.001}
             min={0.001}
-            onChange={(v) => set({ semiSpanM: v })}
+            onChange={(v) => set(part, { semiSpanM: v })}
           />
-          <NumberField label="Sweep" unit="m" value={part.sweepM} step={0.001} onChange={(v) => set({ sweepM: v })} />
+          <NumberField
+            label="Sweep"
+            unit="m"
+            value={part.sweepM}
+            step={0.001}
+            onChange={(v) => set(part, { sweepM: v })}
+          />
         </>
       )}
       {part.kind !== 'mass' && (
         <Select
           label="Material"
           value={part.material}
-          onChange={(v) => set({ material: v as MaterialId })}
+          onChange={(v) => set(part, { material: v as MaterialId })}
           options={MATERIALS.map((m) => ({ value: m, label: m }))}
         />
       )}
