@@ -1,7 +1,7 @@
 /* Task 11 — Design Studio layout. Three columns (tree / schematic / inspector)
-   collapse to a single column below 900px; the schematic (middle) column
-   still awaits a later task. Task 12 fills the right column with the part
-   inspector. */
+   collapse to a single column below 900px. Task 12 fills the right column
+   with the part inspector; Task 13 fills the middle column with the live
+   schematic. */
 
 .design-studio {
   display: grid;
@@ -27,11 +27,34 @@
   gap: var(--fd-space-2);
 }
 
+.ds-schematic {
+  grid-column: 2;
+  display: flex;
+  flex-direction: column;
+  gap: var(--fd-space-2);
+  padding: var(--fd-space-3);
+  border: 1px solid var(--fd-border);
+  border-radius: var(--fd-radius-lg);
+  background: var(--fd-surface);
+}
+
+.ds-schematic svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.ds-margin {
+  margin: 0;
+  font-size: var(--fd-text-sm);
+}
+
 @media (max-width: 900px) {
   .design-studio {
     grid-template-columns: 1fr;
   }
 
+  .ds-schematic,
   .ds-inspector {
     grid-column: 1;
   }
