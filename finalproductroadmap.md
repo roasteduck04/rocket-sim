@@ -37,7 +37,7 @@ Each phase runs its own brainstorm → spec → plan → execute cycle.
 | # | Phase | Size | Depends on | Status | Key references |
 |---|---|---|---|---|---|
 | 8 | Design language & IA | M | — | ✅ done | frontend-design + dataviz skills at exec time |
-| 9 | Rocket design studio | XL (9a–9d) | 8 | ⬜ not started | OpenRocket techdoc; local `OpenRocket/` MDs |
+| 9 | Rocket design studio | XL (9a–9d) | 8 | 🔨 in progress | OpenRocket techdoc; local `OpenRocket/` MDs |
 | 10 | Monte Carlo & dispersion | L | 9 | ⬜ not started | RocketPy MC docs; `OR Monte Carlo.md` |
 | 11 | Airbrakes (active control) | M | 9 | ⬜ not started | ORBrake, or-airbrake-plugin |
 | 12 | Design optimization | M/L | 9 (+10 infra) | ⬜ not started | arXiv:2504.02177 |
@@ -62,8 +62,8 @@ Branch: `phase-9-design-studio` · executed subagent-driven (per-task TDD + revi
 
 - [x] T1 Scaffold `@fds/rocket-design` · [x] T2 Materials + component model + Alpha III preset
 - [x] T3 Mass/CG/inertia · [x] T4 `.eng` motor parser + Estes A8/B6/C6 · [x] T5 Barrowman CNα/CP/margin
-- [ ] T6 Drag buildup · [ ] T7 Aero-table gen · [ ] T8 `buildConfig` bridge · [ ] T9 Alpha III cross-check
-- [ ] T10–15 Studio UI (tree · inspector · schematic · motor picker · Fly it) · [ ] T16 Verify + finalize
+- [x] T6 Drag buildup · [x] T7 Aero-table gen · [x] T8 `buildConfig` bridge · [x] T9 Alpha III cross-check
+- [x] T10–15 Studio UI (tree · inspector · schematic · motor picker · Fly it) · [x] T16 Verify + finalize
 
 Phase 8 (complete 2026-07-09) reference — Spec: `docs/superpowers/specs/2026-07-08-phase-8-design-language-design.md` ·
 Plan: `docs/superpowers/plans/2026-07-08-phase-8-design-language.md` ·
@@ -80,6 +80,16 @@ Design system: `docs/design-system.md` · Branch: `phase-8-design-language`.
 - [x] Stage 8 — Design-system doc + finalize; flip Phase 8 → ✅
 
 **Progress log** (newest first):
+- 2026-07-10 — **Phase 9 slice 1 landed** (T16 verify + finalize). `@fds/rocket-design` package
+  (mass/CG/inertia, Barrowman CNα/CP/margin, drag buildup, aero-table gen, `.eng` motor parser +
+  curated Estes A8/B6/C6, `buildConfig` bridge) plus the `apps/web` design-studio feature (tree
+  editor · inspector · schematic with CP/CG · motor picker · "Fly it" through the untouched sim).
+  Alpha III cross-checked vs OpenRocket. Core `packages/rocket-sim`/`physics-core` untouched.
+  Executed subagent-driven, per-task TDD + review, on branch `phase-9-design-studio`. Full
+  verification green: packages `test` (46 files / 350 tests, golden runs untouched), `test:web`
+  (13 files / 81 tests), `build:web` (tsc --noEmit + vite), `typecheck` — all clean. Phase 9 itself
+  stays 🔨 in progress (this is slice 1 of several; Monte Carlo/airbrakes/optimization dependents
+  still ahead).
 - 2026-07-10 — **Phase 9 slice 1 started** (branch `phase-9-design-studio`, subagent-driven per-task
   TDD + review). Done so far: T1 scaffolded `@fds/rocket-design`; T2 materials + parametric component
   model + Alpha III preset; T3 mass/CG/inertia; T4 RASP `.eng` parser + curated Estes A8/B6/C6; T5
