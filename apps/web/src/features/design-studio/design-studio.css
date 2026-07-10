@@ -1,0 +1,26 @@
+/* Task 11 — Design Studio layout. Three columns (tree / schematic / inspector)
+   collapse to a single column below 900px; later tasks fill the middle and
+   right columns without touching this grid. */
+
+.design-studio {
+  display: grid;
+  grid-template-columns: 260px 1fr 320px;
+  gap: var(--fd-space-4);
+  align-items: start;
+}
+
+.ds-header {
+  grid-column: 1 / -1;
+}
+
+.ds-tree {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fd-space-2);
+}
+
+@media (max-width: 900px) {
+  .design-studio {
+    grid-template-columns: 1fr;
+  }
+}

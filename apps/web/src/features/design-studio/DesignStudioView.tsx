@@ -1,16 +1,32 @@
 /**
- * Task 10 placeholder — Studio nav destination now routes here. Tasks 11-15
- * add the part tree, inspector, schematic, motor picker and fly-it flow on
- * top of the designModel reducer/localStorage this task introduced.
+ * Task 10 wired the nav entry, reducer and localStorage persistence. Task 11
+ * adds the component tree editor (left column) on top of that state; the
+ * schematic (middle) and inspector/motor-picker (right) columns land in
+ * later tasks.
  */
 
-import type { JSX } from 'react';
+import { useEffect, useReducer, useState, type JSX } from 'react';
+import { ComponentTree } from './ComponentTree';
+import { designReducer, loadDesign, saveDesign } from './designModel';
+import './design-studio.css';
 
 export function DesignStudioView(): JSX.Element {
+  const [design, dispatch] = useReducer(designReducer, undefined, loadDesign);
+  const [selectedIndex, setSelectedIndex] = useState(-1);
+
+  useEffect(() => {
+    saveDesign(design);
+  }, [design]);
+
   return (
     <section className="design-studio">
-      <h1>Design Studio</h1>
-      <p>Rocket design studio — walking skeleton.</p>
+      <h1 className="ds-header">Design Studio</h1>
+      <ComponentTree
+        design={design}
+        selectedIndex={selectedIndex}
+        onSelect={setSelectedIndex}
+        dispatch={dispatch}
+      />
     </section>
   );
 }
