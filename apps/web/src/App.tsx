@@ -14,6 +14,7 @@ import { RocketView } from './modules/rocket/RocketView';
 import { ReentryView } from './modules/reentry/ReentryView';
 import { AircraftView } from './modules/aircraft/AircraftView';
 import { LandingSimView } from './features/landing-sim/LandingSimView';
+import { DesignStudioView } from './features/design-studio/DesignStudioView';
 
 export default function App(): JSX.Element {
   const [active, setActive] = useState<ViewId>('overview');
@@ -25,6 +26,7 @@ export default function App(): JSX.Element {
       {active === 'reentry' && <ReentryView />}
       {active === 'aircraft' && <AircraftView />}
       {active === 'landing' && <LandingSimView />}
+      {active === 'design-studio' && <DesignStudioView />}
     </AppShell>
   );
 }

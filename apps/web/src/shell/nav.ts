@@ -6,7 +6,7 @@
  */
 
 /** The views the router can mount today. */
-export type ViewId = 'overview' | 'rocket' | 'reentry' | 'aircraft' | 'landing';
+export type ViewId = 'overview' | 'rocket' | 'reentry' | 'aircraft' | 'landing' | 'design-studio';
 
 export interface NavItem {
   /** Stable key; equals the `ViewId` for active destinations. */
@@ -38,7 +38,7 @@ export const NAV_GROUPS: ReadonlyArray<NavGroup> = [
   {
     title: 'Studio',
     items: [
-      { id: 'design-studio', label: 'Rocket Design Studio', disabled: true, soon: 'Phase 9' },
+      { id: 'design-studio', label: 'Rocket Design Studio', view: 'design-studio' },
     ],
   },
   {
