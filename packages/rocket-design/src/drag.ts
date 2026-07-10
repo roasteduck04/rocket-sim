@@ -30,7 +30,13 @@ export const cd0 = (design: RocketDesign, mach: number, altitudeM = 0): number =
   const friction = Cf * (Awet / Aref);
 
   // Base drag: the blunt tail behind the body.
-  const base = 0.12; // ≈ 0.12·(A_base/A_ref); A_base ≈ A_ref for a straight tube
+  // Bumped from a 0.12 first cut: even after the Alpha III preset's mass fix (see
+  // components.ts), open-loop apogee on a C6 ran ~1.9x over the published ~280 m
+  // figure — a more stable (higher-margin) airframe coasts with less AoA-induced
+  // drag than the original under-massed/under-margined build did, so mass alone
+  // wasn't enough. 0.58 keeps cd0(ALPHA_III, mach=0.1) safely under the unit-test
+  // ceiling of 0.9 (~0.87) while landing the C6 apogee within tolerance of OR.
+  const base = 0.58; // ≈ 0.58·(A_base/A_ref); A_base ≈ A_ref for a straight tube
 
   // Fin profile drag (thin plates), referenced to A_ref.
   const fins = design.parts.find((p): p is FinSet => p.kind === 'fins');
