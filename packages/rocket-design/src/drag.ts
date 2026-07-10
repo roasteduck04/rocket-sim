@@ -34,7 +34,7 @@ export const cd0 = (design: RocketDesign, mach: number, altitudeM = 0): number =
   // typically ~0.45–0.6 all-in; the friction + fin terms above already cover
   // several tenths of that, so a `base` of ~0.12–0.2 is a physically defensible
   // slice of the remainder for a smooth, blunt-based BT-50 airframe.
-  const base = 0.2; // ≈ 0.2·(A_base/A_ref); A_base ≈ A_ref for a straight tube
+  const base = 0.2; // realistic upper bound; ≈ 0.2·(A_base/A_ref), A_base ≈ A_ref for a straight tube
 
   // Fin profile drag (thin plates), referenced to A_ref.
   const fins = design.parts.find((p): p is FinSet => p.kind === 'fins');
