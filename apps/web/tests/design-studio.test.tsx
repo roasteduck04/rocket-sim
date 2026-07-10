@@ -1,6 +1,9 @@
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { ALPHA_III } from '@fds/rocket-design';
-import { designReducer } from '../src/features/design-studio/designModel';
+import { designReducer, loadDesign } from '../src/features/design-studio/designModel';
+import { installMemoryLocalStorage } from './localStorageShim';
+
+const KEY = 'fds-rocket-design';
 
 // ALPHA_III's parts are [nose, mass, tube, fins, mass] (Task 9's mass-model
 // calibration inserted the two `mass` hardware components), not the bare
@@ -18,5 +21,27 @@ describe('designReducer', () => {
   it('removes a part', () => {
     const d = designReducer(ALPHA_III, { type: 'removePart', index: 2 });
     expect(d.parts).toHaveLength(4);
+  });
+});
+
+describe('loadDesign', () => {
+  beforeEach(() => {
+    installMemoryLocalStorage();
+  });
+
+  it('falls back to the default design when localStorage holds a corrupt value', () => {
+    localStorage.setItem(KEY, 'not json{{{');
+    expect(loadDesign()).toEqual(ALPHA_III);
+  });
+
+  it('falls back to the default design when the stored value has no parts array', () => {
+    localStorage.setItem(KEY, JSON.stringify({ name: 'not a design' }));
+    expect(loadDesign()).toEqual(ALPHA_III);
+  });
+
+  it('loads a well-formed stored design', () => {
+    const stored = { ...ALPHA_III, name: 'Custom' };
+    localStorage.setItem(KEY, JSON.stringify(stored));
+    expect(loadDesign()).toEqual(stored);
   });
 });

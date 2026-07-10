@@ -47,7 +47,20 @@ export const designReducer = (state: RocketDesign, action: DesignAction): Rocket
 export const loadDesign = (): RocketDesign => {
   try {
     const raw = localStorage.getItem(KEY);
-    if (raw) return JSON.parse(raw) as RocketDesign;
+    if (raw) {
+      const parsed: unknown = JSON.parse(raw);
+      // Shape-check before trusting the cast — a corrupt or foreign value
+      // under this key (e.g. from a future/older schema, or manual edits)
+      // must fall back to the default design rather than propagate a
+      // malformed `RocketDesign` into the reducer (deferred review finding).
+      if (
+        parsed != null &&
+        typeof parsed === 'object' &&
+        Array.isArray((parsed as { parts?: unknown }).parts)
+      ) {
+        return parsed as RocketDesign;
+      }
+    }
   } catch {
     /* ignore corrupt/absent storage */
   }
