@@ -7,5 +7,6 @@ export * from './components.js';
 export * from './massModel.js';
 export * from './motors.js';
 export * from './barrowman.js';
+export * from './drag.js';
 
 export const PACKAGE = '@fds/rocket-design';

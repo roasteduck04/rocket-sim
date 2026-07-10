@@ -5,6 +5,7 @@
     "outDir": "dist",
     "baseUrl": ".",
     "paths": {
+      "@fds/atmosphere-models": ["../atmosphere-models/src/index.ts"],
       "@fds/physics-core": ["../physics-core/src/index.ts"],
       "@fds/rocket-sim": ["../rocket-sim/src/index.ts"]
     }

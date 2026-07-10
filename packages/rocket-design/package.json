@@ -7,6 +7,7 @@
   "types": "./src/index.ts",
   "exports": { ".": "./src/index.ts" },
   "dependencies": {
+    "@fds/atmosphere-models": "*",
     "@fds/physics-core": "*",
     "@fds/rocket-sim": "*"
   }
