@@ -2,7 +2,8 @@
    collapse to a single column below 900px. Task 12 fills the right column
    with the part inspector; Task 13 fills the middle column with the live
    schematic. Task 14 adds the motor picker and design summary strip to the
-   right column. */
+   right column. Task 15 adds the "Fly it" action + results under the
+   schematic, in the same middle column. */
 
 .design-studio {
   display: grid;
@@ -50,6 +51,19 @@
   font-size: var(--fd-text-sm);
 }
 
+.ds-flight {
+  grid-column: 2;
+  display: flex;
+  flex-direction: column;
+  gap: var(--fd-space-2);
+  align-items: flex-start;
+}
+
+.ds-flight .ds-summary,
+.ds-flight .chart-grid {
+  width: 100%;
+}
+
 .ds-motor {
   display: flex;
   flex-direction: column;
@@ -76,6 +90,7 @@
   }
 
   .ds-schematic,
+  .ds-flight,
   .ds-inspector {
     grid-column: 1;
   }
